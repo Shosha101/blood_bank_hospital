@@ -4,8 +4,8 @@ import 'package:blood_bank_hospital/features/login/logic/login_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginCubit extends Cubit<LoginState> {
-  final LoginRepo _addHospitalRepo;
-  LoginCubit(this._addHospitalRepo) : super(const LoginState.initial());
+  final LoginRepo _loginRepo;
+  LoginCubit(this._loginRepo) : super(const LoginState.initial());
 
   // List<SpecializationsData?>? specializationsList = [];
 
