@@ -1,14 +1,15 @@
+
 // lib/features/dashboard/ui/dashboard_screen.dart
 import 'package:blood_bank_hospital/core/extension/navigation_extension.dart';
 import 'package:blood_bank_hospital/core/helpers/spacing.dart';
 import 'package:blood_bank_hospital/core/routing/routes.dart';
 import 'package:blood_bank_hospital/core/widgets/sidebar.dart';
+import 'package:blood_bank_hospital/features/dashboard/logic/active_requests_table_cubit.dart';
+import 'package:blood_bank_hospital/features/dashboard/logic/active_requests_table_state.dart';
 import 'package:blood_bank_hospital/features/dashboard/logic/summary_card_cubit.dart';
 import 'package:blood_bank_hospital/features/dashboard/logic/summary_card_state.dart';
-import 'package:blood_bank_hospital/features/dashboard/ui/dashboard_active_table.dart';
-import 'package:blood_bank_hospital/features/dashboard/ui/summary_card.dart';
-
-import 'package:blood_bank_hospital/features/inventory_management/ui/inventory_management_screen.dart';
+import 'package:blood_bank_hospital/features/dashboard/ui/active_requests_table.dart';
+import 'package:blood_bank_hospital/features/dashboard/ui/summary_card.dart';import 'package:blood_bank_hospital/features/inventory_management/ui/inventory_management_screen.dart';
 import 'package:blood_bank_hospital/features/past_requests/ui/past_requests_screen.dart';
 import 'package:blood_bank_hospital/features/settings/ui/settings_screen.dart';
 import 'package:flutter/material.dart';
@@ -30,17 +31,6 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
   final _controller = SidebarXController(selectedIndex: 0, extended: true); // Open by default
   final _key = GlobalKey<ScaffoldState>();
   final _navigatorKey = GlobalKey<NavigatorState>();
-
-  final List<Map<String, String>> requests = List.generate(
-    5,
-    (index) => {
-      'id': '#REQ${index + 1}',
-      'bloodType': ['A+', 'B+', 'O-', 'AB+'][index % 4],
-      'quantity': '${(index + 1) * 2} Units',
-      'status': ['Completed', 'In Progress', 'Pending'][index % 3],
-      'dateTime': '2025-08-14 10:3$index AM',
-    },
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -159,8 +149,15 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
 
   Widget _buildDashboardContent(
       BuildContext context, double horizontalPadding) {
-    return BlocProvider(
-      create: (context) => GetIt.I<SummaryCardCubit>()..getRequestCounts(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => GetIt.I<SummaryCardCubit>()..getRequestCounts(),
+        ),
+        BlocProvider(
+          create: (context) => GetIt.I<ActiveRequestsCubit>()..getActiveRequests(),
+        ),
+      ],
       child: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
@@ -208,11 +205,32 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                 ),
               ),
               SizedBox(height: 25.h),
-              ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight: 400.h,
-                ),
-                child: RecentRequestsTable(requests: requests),
+              BlocBuilder<ActiveRequestsCubit, ActiveRequestsState>(
+                builder: (context, state) {
+                  return state.maybeWhen(
+                    loading: () => const Center(child: CircularProgressIndicator()),
+                    success: (requests) => ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxHeight: 400.h,
+                      ),
+                      child: RecentRequestsTable(
+                        requests: requests.map((req) => {
+                          'id': '#REQ${req.id}',
+                          'bloodType': req.bloodTypeName,
+                          'quantity': '${req.numOfLiter} Units',
+                          'status': req.status,
+                          'dateTime': req.createdAt,
+                        }).toList(),
+                      ),
+                    ),
+                    error: (errorHandler) => Center(
+                      child: Text(
+                        errorHandler.apiErrorModel.message ?? 'Error fetching requests',
+                      ),
+                    ),
+                    orElse: () => const SizedBox.shrink(),
+                  );
+                },
               ),
               verticalSpace(20),
             ],

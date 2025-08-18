@@ -1,5 +1,4 @@
 import 'package:blood_bank_hospital/core/routing/routes.dart';
-import 'package:blood_bank_hospital/features/dashboard/logic/dashboard_cubit.dart';
 import 'package:blood_bank_hospital/features/dashboard/ui/dashboard_screen.dart';
 import 'package:blood_bank_hospital/features/inventory_management/logic/inventory_management_cubit.dart';
 import 'package:blood_bank_hospital/features/inventory_management/ui/inventory_management_screen.dart';
@@ -20,10 +19,10 @@ class AppRouter {
     final getIt = GetIt.instance;
 
     switch (settings.name) {
-      // case Routes.onBoardingScreen:
-      //   return MaterialPageRoute(
-      //     builder: (_) => const HospitalsScreen(),
-      //   );
+      case Routes.dashboardScreen:
+        return MaterialPageRoute(
+          builder: (_) => const DashBoardScreen(),
+        );
       case Routes.loginScreen:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
@@ -31,13 +30,13 @@ class AppRouter {
             child: const LoginScreen(),
           ),
         );
-      case Routes.dashboardScreen:
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (context) => getIt<DashboardCubit>(),
-            child: const DashBoardScreen(),
-          ),
-        );
+      // case Routes.dashboardScreen:
+      //   return MaterialPageRoute(
+      //     builder: (_) => BlocProvider(
+      //       create: (context) => getIt<DashboardCubit>(),
+      //       child: const DashBoardScreen(),
+      //     ),
+      //   );
       case Routes.pastRequesScreen:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(

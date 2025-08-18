@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'dashboard_api_service.dart';
+part of 'active_requests_table_api_service.dart';
 
 // **************************************************************************
 // RetrofitGenerator
@@ -8,8 +8,8 @@ part of 'dashboard_api_service.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element,unnecessary_string_interpolations,unused_element_parameter
 
-class _DashboardApiService implements DashboardApiService {
-  _DashboardApiService(this._dio, {this.baseUrl, this.errorLogger}) {
+class _ActiveRequestsApiService implements ActiveRequestsApiService {
+  _ActiveRequestsApiService(this._dio, {this.baseUrl, this.errorLogger}) {
     baseUrl ??= 'http://hemolink.runasp.net/api/';
   }
 
@@ -18,6 +18,38 @@ class _DashboardApiService implements DashboardApiService {
   String? baseUrl;
 
   final ParseErrorLogger? errorLogger;
+
+  @override
+  Future<List<ActiveRequestsModel>> getActiveRequests() async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<List<ActiveRequestsModel>>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            'DonationRequest/hospital/active/2',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<List<dynamic>>(_options);
+    late List<ActiveRequestsModel> _value;
+    try {
+      _value = _result.data!
+          .map(
+            (dynamic i) =>
+                ActiveRequestsModel.fromJson(i as Map<String, dynamic>),
+          )
+          .toList();
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
