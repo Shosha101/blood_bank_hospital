@@ -1,5 +1,3 @@
-
-
 import 'package:blood_bank_hospital/core/routing/app_router.dart';
 import 'package:blood_bank_hospital/core/routing/routes.dart';
 import 'package:blood_bank_hospital/core/theming/colors.dart';
@@ -15,18 +13,25 @@ class HospitalApp extends StatelessWidget {
     return ScreenUtilInit(
       designSize: const Size(1280, 800),
       minTextAdapt: true,
-      child: MaterialApp(
-        
-        title: 'Hospital App', // Fixed typo
-        theme: ThemeData(
-          primaryColor: ColorsManager.mainBlue,
-          scaffoldBackgroundColor: Colors.white,
-        ),
-        debugShowCheckedModeBanner: false,
-        initialRoute: Routes.loginScreen,
-        onGenerateRoute: appRouter.generateRoute,
-        
-      ),
+      splitScreenMode: true, // Improves web responsiveness
+      builder: (context, child) {
+        return MaterialApp(
+          title: 'Hospital App',
+          theme: ThemeData(
+            primaryColor: ColorsManager.mainBlue,
+            scaffoldBackgroundColor: Colors.white,
+          ),
+          debugShowCheckedModeBanner: false,
+          initialRoute: Routes.loginScreen,
+          onGenerateRoute: appRouter.generateRoute,
+          builder: (context, widget) {
+            return MediaQuery(
+              data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+              child: widget!,
+            );
+          },
+        );
+      },
     );
   }
 }

@@ -10,7 +10,7 @@ part of 'inventory_management_api_service.dart';
 
 class _InventoryManagementApiService implements InventoryManagementApiService {
   _InventoryManagementApiService(this._dio, {this.baseUrl, this.errorLogger}) {
-    baseUrl ??= 'https://vcare.integration25.com/api/';
+    baseUrl ??= 'http://hemolink.runasp.net/api/';
   }
 
   final Dio _dio;

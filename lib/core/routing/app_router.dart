@@ -1,21 +1,23 @@
-
-import 'package:blood_bank_hospital/core/di/dependency_injection.dart';
 import 'package:blood_bank_hospital/core/routing/routes.dart';
-import 'package:blood_bank_hospital/features/dashboard/ui/dash_board_screen.dart';
+import 'package:blood_bank_hospital/features/dashboard/logic/dashboard_cubit.dart';
+import 'package:blood_bank_hospital/features/dashboard/ui/dashboard_screen.dart';
 import 'package:blood_bank_hospital/features/inventory_management/logic/inventory_management_cubit.dart';
 import 'package:blood_bank_hospital/features/inventory_management/ui/inventory_management_screen.dart';
 import 'package:blood_bank_hospital/features/login/logic/login_cubit.dart';
 import 'package:blood_bank_hospital/features/login/ui/login_screen.dart';
+import 'package:blood_bank_hospital/features/past_requests/logic/past_requests_cubit.dart';
 import 'package:blood_bank_hospital/features/past_requests/ui/past_requests_screen.dart';
 import 'package:blood_bank_hospital/features/settings/logic/settings_cubit.dart';
 import 'package:blood_bank_hospital/features/settings/ui/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 
 class AppRouter {
   Route? generateRoute(RouteSettings settings) {
     //this arguments to be passed in any screen like this ( arguments as ClassName )
     final arguments = settings.arguments;
+    final getIt = GetIt.instance;
 
     switch (settings.name) {
       // case Routes.onBoardingScreen:
@@ -29,28 +31,28 @@ class AppRouter {
             child: const LoginScreen(),
           ),
         );
-        case Routes.dashboardScreen:
+      case Routes.dashboardScreen:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
-            create: (context) => getIt<LoginCubit>(),
+            create: (context) => getIt<DashboardCubit>(),
             child: const DashBoardScreen(),
           ),
         );
-        case Routes.pastRequesScreen:
+      case Routes.pastRequesScreen:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
-            create: (context) => getIt<LoginCubit>(),
+            create: (context) => getIt<PastRequestsCubit>(),
             child: const PastRequestsScreen(),
           ),
         );
-        case Routes.settingsScreen:
+      case Routes.settingsScreen:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
             create: (context) => getIt<SettingsCubit>(),
             child: const SettingsScreen(),
           ),
         );
-        case Routes.inventoryManagementScreen:
+      case Routes.inventoryManagementScreen:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
             create: (context) => getIt<InventoryManagementCubit>(),
