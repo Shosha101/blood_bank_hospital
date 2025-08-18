@@ -8,7 +8,9 @@ import 'package:blood_bank_hospital/features/dashboard/data/repo/active_requests
 import 'package:blood_bank_hospital/features/dashboard/data/repo/summary_card_repo.dart';
 import 'package:blood_bank_hospital/features/dashboard/logic/active_requests_table_cubit.dart';
 import 'package:blood_bank_hospital/features/dashboard/logic/summary_card_cubit.dart';
-
+import 'package:blood_bank_hospital/features/inventory_management/data/api/inventory_management_api_service.dart';
+import 'package:blood_bank_hospital/features/inventory_management/data/repo/inventory_management_repo.dart';
+import 'package:blood_bank_hospital/features/inventory_management/logic/inventory_management_cubit.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 
@@ -28,4 +30,9 @@ Future<void> setupGetIt() async {
   getIt.registerLazySingleton<ActiveRequestsApiService>(() => ActiveRequestsApiService(dio));
   getIt.registerLazySingleton<ActiveRequestsRepo>(() => ActiveRequestsRepo(getIt()));
   getIt.registerFactory<ActiveRequestsCubit>(() => ActiveRequestsCubit(getIt()));
+
+  // Inventory
+  getIt.registerLazySingleton<InventoryApiService>(() => InventoryApiService(dio));
+  getIt.registerLazySingleton<InventoryRepo>(() => InventoryRepo(getIt()));
+  getIt.registerFactory<InventoryCubit>(() => InventoryCubit(getIt()));
 }

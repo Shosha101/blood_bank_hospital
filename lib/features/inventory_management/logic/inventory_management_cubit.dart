@@ -1,50 +1,39 @@
 
+// lib/features/inventory_management/logic/inventory_cubit.dart
+import 'package:blood_bank_hospital/core/networking/api_result.dart';
+import 'package:blood_bank_hospital/features/inventory_management/data/model/inventory_management_model.dart';
 import 'package:blood_bank_hospital/features/inventory_management/data/repo/inventory_management_repo.dart';
 import 'package:blood_bank_hospital/features/inventory_management/logic/inventory_management_state.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class InventoryManagementCubit extends Cubit<InventoryManagementState> {
-  final InventoryManagementRepo _inventoryManagementRepo;
-  InventoryManagementCubit(this._inventoryManagementRepo) : super(const InventoryManagementState.initial());
+class InventoryCubit extends Cubit<InventoryState> {
+  final InventoryRepo _inventoryRepo;
 
-  // List<SpecializationsData?>? specializationsList = [];
+  InventoryCubit(this._inventoryRepo) : super(const InventoryState.initial());
 
-  // void getSpecializations() async {
-  //   emit(const HomeState.specializationsLoading());
-  //   final response = await _homeRepo.getSpecialization();
-  //   response.when(
-  //     success: (specializationsResponseModel) {
-  //       specializationsList =
-  //           specializationsResponseModel.specializationDataList ?? [];
+  void getInventory() async {
+    emit(const InventoryState.loading());
+    final result = await _inventoryRepo.getInventory();
+    result.when(
+      success: (inventory) => emit(InventoryState.success(inventory)),
+      failure: (errorHandler) => emit(InventoryState.error(errorHandler)),
+    );
+  }
 
-  //       // getting the doctors list for the first specialization by default.
-  //       getDoctorsList(specializationId: specializationsList?.first?.id);
-
-  //       emit(HomeState.specializationsSuccess(
-  //           specializationsResponseModel.specializationDataList));
-  //     },
-  //     failure: (errorHandler) {
-  //       emit(HomeState.specializationsError(errorHandler));
-  //     },
-  //   );
-  // }
-
-  // void getDoctorsList({required int? specializationId}) {
-  //   List<Doctors?>? doctorsList =
-  //       getDoctorsListBySpecializationId(specializationId);
-
-  //   if (!doctorsList.isNullOrEmpty()) {
-  //     emit(HomeState.doctorsSuccess(doctorsList));
-  //   } else {
-  //     emit(HomeState.doctorsError(ErrorHandler.handle('No doctors found')));
-  //   }
-  // }
-
-  // /// returns the list of doctors based on the specialization id
-  // getDoctorsListBySpecializationId(specializationId) {
-  //   return specializationsList
-  //       ?.firstWhere((specialization) => specialization?.id == specializationId)
-  //       ?.doctorsList;
-  // }
+  void updateInventory(InventoryModel updatedInventory) async {
+    emit(const InventoryState.loading());
+    final result = await _inventoryRepo.updateInventory(updatedInventory);
+    result.when(
+      success: (_) async {
+        // Refetch inventory to update UI
+        final inventoryResult = await _inventoryRepo.getInventory();
+        inventoryResult.when(
+          success: (inventory) => emit(InventoryState.success(inventory)),
+          failure: (errorHandler) => emit(InventoryState.error(errorHandler)),
+        );
+      },
+      failure: (errorHandler) => emit(InventoryState.error(errorHandler)),
+    );
+  }
 }

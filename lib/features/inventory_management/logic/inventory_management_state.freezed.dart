@@ -12,7 +12,7 @@ part of 'inventory_management_state.dart';
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
-mixin _$InventoryManagementState {
+mixin _$InventoryState {
 
 
 
@@ -20,7 +20,7 @@ mixin _$InventoryManagementState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is InventoryManagementState);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is InventoryState);
 }
 
 
@@ -29,20 +29,20 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'InventoryManagementState()';
+  return 'InventoryState()';
 }
 
 
 }
 
 /// @nodoc
-class $InventoryManagementStateCopyWith<$Res>  {
-$InventoryManagementStateCopyWith(InventoryManagementState _, $Res Function(InventoryManagementState) __);
+class $InventoryStateCopyWith<$Res>  {
+$InventoryStateCopyWith(InventoryState _, $Res Function(InventoryState) __);
 }
 
 
-/// Adds pattern-matching-related methods to [InventoryManagementState].
-extension InventoryManagementStatePatterns on InventoryManagementState {
+/// Adds pattern-matching-related methods to [InventoryState].
+extension InventoryStatePatterns on InventoryState {
 /// A variant of `map` that fallback to returning `orElse`.
 ///
 /// It is equivalent to doing:
@@ -55,13 +55,14 @@ extension InventoryManagementStatePatterns on InventoryManagementState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( InventoryManagementStateLoading value)?  hospitalsLoading,TResult Function( InventoryManagementStateError value)?  hospitalsError,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( InventoryStateLoading value)?  loading,TResult Function( InventoryStateSuccess value)?  success,TResult Function( InventoryStateError value)?  error,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
-return initial(_that);case InventoryManagementStateLoading() when hospitalsLoading != null:
-return hospitalsLoading(_that);case InventoryManagementStateError() when hospitalsError != null:
-return hospitalsError(_that);case _:
+return initial(_that);case InventoryStateLoading() when loading != null:
+return loading(_that);case InventoryStateSuccess() when success != null:
+return success(_that);case InventoryStateError() when error != null:
+return error(_that);case _:
   return orElse();
 
 }
@@ -79,13 +80,14 @@ return hospitalsError(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( InventoryManagementStateLoading value)  hospitalsLoading,required TResult Function( InventoryManagementStateError value)  hospitalsError,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( InventoryStateLoading value)  loading,required TResult Function( InventoryStateSuccess value)  success,required TResult Function( InventoryStateError value)  error,}){
 final _that = this;
 switch (_that) {
 case _Initial():
-return initial(_that);case InventoryManagementStateLoading():
-return hospitalsLoading(_that);case InventoryManagementStateError():
-return hospitalsError(_that);case _:
+return initial(_that);case InventoryStateLoading():
+return loading(_that);case InventoryStateSuccess():
+return success(_that);case InventoryStateError():
+return error(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -102,13 +104,14 @@ return hospitalsError(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( InventoryManagementStateLoading value)?  hospitalsLoading,TResult? Function( InventoryManagementStateError value)?  hospitalsError,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( InventoryStateLoading value)?  loading,TResult? Function( InventoryStateSuccess value)?  success,TResult? Function( InventoryStateError value)?  error,}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
-return initial(_that);case InventoryManagementStateLoading() when hospitalsLoading != null:
-return hospitalsLoading(_that);case InventoryManagementStateError() when hospitalsError != null:
-return hospitalsError(_that);case _:
+return initial(_that);case InventoryStateLoading() when loading != null:
+return loading(_that);case InventoryStateSuccess() when success != null:
+return success(_that);case InventoryStateError() when error != null:
+return error(_that);case _:
   return null;
 
 }
@@ -125,12 +128,13 @@ return hospitalsError(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  hospitalsLoading,TResult Function( ErrorHandler errorHandler)?  hospitalsError,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<InventoryModel> inventory)?  success,TResult Function( ErrorHandler errorHandler)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
-return initial();case InventoryManagementStateLoading() when hospitalsLoading != null:
-return hospitalsLoading();case InventoryManagementStateError() when hospitalsError != null:
-return hospitalsError(_that.errorHandler);case _:
+return initial();case InventoryStateLoading() when loading != null:
+return loading();case InventoryStateSuccess() when success != null:
+return success(_that.inventory);case InventoryStateError() when error != null:
+return error(_that.errorHandler);case _:
   return orElse();
 
 }
@@ -148,12 +152,13 @@ return hospitalsError(_that.errorHandler);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  hospitalsLoading,required TResult Function( ErrorHandler errorHandler)  hospitalsError,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<InventoryModel> inventory)  success,required TResult Function( ErrorHandler errorHandler)  error,}) {final _that = this;
 switch (_that) {
 case _Initial():
-return initial();case InventoryManagementStateLoading():
-return hospitalsLoading();case InventoryManagementStateError():
-return hospitalsError(_that.errorHandler);case _:
+return initial();case InventoryStateLoading():
+return loading();case InventoryStateSuccess():
+return success(_that.inventory);case InventoryStateError():
+return error(_that.errorHandler);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -170,12 +175,13 @@ return hospitalsError(_that.errorHandler);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  hospitalsLoading,TResult? Function( ErrorHandler errorHandler)?  hospitalsError,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<InventoryModel> inventory)?  success,TResult? Function( ErrorHandler errorHandler)?  error,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
-return initial();case InventoryManagementStateLoading() when hospitalsLoading != null:
-return hospitalsLoading();case InventoryManagementStateError() when hospitalsError != null:
-return hospitalsError(_that.errorHandler);case _:
+return initial();case InventoryStateLoading() when loading != null:
+return loading();case InventoryStateSuccess() when success != null:
+return success(_that.inventory);case InventoryStateError() when error != null:
+return error(_that.errorHandler);case _:
   return null;
 
 }
@@ -186,7 +192,7 @@ return hospitalsError(_that.errorHandler);case _:
 /// @nodoc
 
 
-class _Initial implements InventoryManagementState {
+class _Initial implements InventoryState {
   const _Initial();
   
 
@@ -206,7 +212,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'InventoryManagementState.initial()';
+  return 'InventoryState.initial()';
 }
 
 
@@ -218,8 +224,8 @@ String toString() {
 /// @nodoc
 
 
-class InventoryManagementStateLoading implements InventoryManagementState {
-  const InventoryManagementStateLoading();
+class InventoryStateLoading implements InventoryState {
+  const InventoryStateLoading();
   
 
 
@@ -229,7 +235,7 @@ class InventoryManagementStateLoading implements InventoryManagementState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is InventoryManagementStateLoading);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is InventoryStateLoading);
 }
 
 
@@ -238,7 +244,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'InventoryManagementState.hospitalsLoading()';
+  return 'InventoryState.loading()';
 }
 
 
@@ -250,23 +256,95 @@ String toString() {
 /// @nodoc
 
 
-class InventoryManagementStateError implements InventoryManagementState {
-  const InventoryManagementStateError(this.errorHandler);
+class InventoryStateSuccess implements InventoryState {
+  const InventoryStateSuccess(final  List<InventoryModel> inventory): _inventory = inventory;
   
 
- final  ErrorHandler errorHandler;
+ final  List<InventoryModel> _inventory;
+ List<InventoryModel> get inventory {
+  if (_inventory is EqualUnmodifiableListView) return _inventory;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_inventory);
+}
 
-/// Create a copy of InventoryManagementState
+
+/// Create a copy of InventoryState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$InventoryManagementStateErrorCopyWith<InventoryManagementStateError> get copyWith => _$InventoryManagementStateErrorCopyWithImpl<InventoryManagementStateError>(this, _$identity);
+$InventoryStateSuccessCopyWith<InventoryStateSuccess> get copyWith => _$InventoryStateSuccessCopyWithImpl<InventoryStateSuccess>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is InventoryManagementStateError&&(identical(other.errorHandler, errorHandler) || other.errorHandler == errorHandler));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is InventoryStateSuccess&&const DeepCollectionEquality().equals(other._inventory, _inventory));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_inventory));
+
+@override
+String toString() {
+  return 'InventoryState.success(inventory: $inventory)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $InventoryStateSuccessCopyWith<$Res> implements $InventoryStateCopyWith<$Res> {
+  factory $InventoryStateSuccessCopyWith(InventoryStateSuccess value, $Res Function(InventoryStateSuccess) _then) = _$InventoryStateSuccessCopyWithImpl;
+@useResult
+$Res call({
+ List<InventoryModel> inventory
+});
+
+
+
+
+}
+/// @nodoc
+class _$InventoryStateSuccessCopyWithImpl<$Res>
+    implements $InventoryStateSuccessCopyWith<$Res> {
+  _$InventoryStateSuccessCopyWithImpl(this._self, this._then);
+
+  final InventoryStateSuccess _self;
+  final $Res Function(InventoryStateSuccess) _then;
+
+/// Create a copy of InventoryState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? inventory = null,}) {
+  return _then(InventoryStateSuccess(
+null == inventory ? _self._inventory : inventory // ignore: cast_nullable_to_non_nullable
+as List<InventoryModel>,
+  ));
+}
+
+
+}
+
+/// @nodoc
+
+
+class InventoryStateError implements InventoryState {
+  const InventoryStateError(this.errorHandler);
+  
+
+ final  ErrorHandler errorHandler;
+
+/// Create a copy of InventoryState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$InventoryStateErrorCopyWith<InventoryStateError> get copyWith => _$InventoryStateErrorCopyWithImpl<InventoryStateError>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is InventoryStateError&&(identical(other.errorHandler, errorHandler) || other.errorHandler == errorHandler));
 }
 
 
@@ -275,15 +353,15 @@ int get hashCode => Object.hash(runtimeType,errorHandler);
 
 @override
 String toString() {
-  return 'InventoryManagementState.hospitalsError(errorHandler: $errorHandler)';
+  return 'InventoryState.error(errorHandler: $errorHandler)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $InventoryManagementStateErrorCopyWith<$Res> implements $InventoryManagementStateCopyWith<$Res> {
-  factory $InventoryManagementStateErrorCopyWith(InventoryManagementStateError value, $Res Function(InventoryManagementStateError) _then) = _$InventoryManagementStateErrorCopyWithImpl;
+abstract mixin class $InventoryStateErrorCopyWith<$Res> implements $InventoryStateCopyWith<$Res> {
+  factory $InventoryStateErrorCopyWith(InventoryStateError value, $Res Function(InventoryStateError) _then) = _$InventoryStateErrorCopyWithImpl;
 @useResult
 $Res call({
  ErrorHandler errorHandler
@@ -294,17 +372,17 @@ $Res call({
 
 }
 /// @nodoc
-class _$InventoryManagementStateErrorCopyWithImpl<$Res>
-    implements $InventoryManagementStateErrorCopyWith<$Res> {
-  _$InventoryManagementStateErrorCopyWithImpl(this._self, this._then);
+class _$InventoryStateErrorCopyWithImpl<$Res>
+    implements $InventoryStateErrorCopyWith<$Res> {
+  _$InventoryStateErrorCopyWithImpl(this._self, this._then);
 
-  final InventoryManagementStateError _self;
-  final $Res Function(InventoryManagementStateError) _then;
+  final InventoryStateError _self;
+  final $Res Function(InventoryStateError) _then;
 
-/// Create a copy of InventoryManagementState
+/// Create a copy of InventoryState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? errorHandler = null,}) {
-  return _then(InventoryManagementStateError(
+  return _then(InventoryStateError(
 null == errorHandler ? _self.errorHandler : errorHandler // ignore: cast_nullable_to_non_nullable
 as ErrorHandler,
   ));

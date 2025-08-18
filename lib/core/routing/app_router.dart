@@ -54,7 +54,7 @@ class AppRouter {
       case Routes.inventoryManagementScreen:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
-            create: (context) => getIt<InventoryManagementCubit>(),
+            create: (context) => getIt<InventoryCubit>(),
             child: const InventoryManagementScreen(),
           ),
         );

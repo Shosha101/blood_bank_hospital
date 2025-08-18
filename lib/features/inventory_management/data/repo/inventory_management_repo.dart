@@ -1,18 +1,31 @@
 
-
+// lib/features/inventory_management/data/repo/inventory_repo.dart
+import 'package:blood_bank_hospital/core/networking/api_error_handler.dart';
+import 'package:blood_bank_hospital/core/networking/api_result.dart';
 import 'package:blood_bank_hospital/features/inventory_management/data/api/inventory_management_api_service.dart';
+import 'package:blood_bank_hospital/features/inventory_management/data/model/inventory_management_model.dart';
 
-class InventoryManagementRepo {
-  final InventoryManagementApiService _inventoryManagementApiService;
+class InventoryRepo {
+  final InventoryApiService _inventoryApiService;
 
-  InventoryManagementRepo(this._inventoryManagementApiService);
+  InventoryRepo(this._inventoryApiService);
 
-  // Future<ApiResult<HospitalsResponseModel>> getSpecialization() async {
-  //   try {
-  //     final response = await _hospitalsApiService.getHospitals();
-  //     return ApiResult.success(response);
-  //   } catch (error) {
-  //     return ApiResult.failure(ErrorHandler.handle(error));
-  //   }
-  // }
+  Future<ApiResult<List<InventoryModel>>> getInventory() async {
+    try {
+      final inventory = await _inventoryApiService.getInventory();
+      return ApiResult.success(inventory);
+    } catch (error) {
+      return ApiResult.failure(ErrorHandler.handle(error));
+    }
+  }
+  
+  Future<ApiResult<void>> updateInventory(InventoryModel inventory) async {
+    try {
+      await _inventoryApiService.updateInventory(inventory.id, inventory);
+      return const ApiResult.success(null);
+    } catch (error) {
+      return ApiResult.failure(ErrorHandler.handle(error));
+    }
+  }
+
 }
