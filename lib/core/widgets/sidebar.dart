@@ -28,7 +28,8 @@ class _SideBarXExampleState extends State<SideBarXExample> {
 
   Future<void> _loadExpandedState() async {
     final prefs = await SharedPreferences.getInstance();
-    final isExtended = prefs.getBool('sidebar_extended') ?? true; // Default to open
+    final isExtended =
+        prefs.getBool('sidebar_extended') ?? true; // Default to open
     if (mounted) {
       widget._controller.setExtended(isExtended);
     }
@@ -141,6 +142,10 @@ class _SideBarXExampleState extends State<SideBarXExample> {
                   SidebarXItem(
                     icon: Icons.inventory,
                     label: 'Inventory Management',
+                  ),
+                  SidebarXItem(
+                    icon: Icons.request_page,
+                    label: 'Past Requests',
                   ),
                   SidebarXItem(icon: Icons.settings, label: 'Settings'),
                   SidebarXItem(icon: Icons.logout, label: 'Logout'),

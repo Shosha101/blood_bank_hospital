@@ -1,4 +1,3 @@
-
 // lib/features/dashboard/ui/dashboard_screen.dart
 import 'package:blood_bank_hospital/core/extension/navigation_extension.dart';
 import 'package:blood_bank_hospital/core/helpers/spacing.dart';
@@ -9,7 +8,8 @@ import 'package:blood_bank_hospital/features/dashboard/logic/active_requests_tab
 import 'package:blood_bank_hospital/features/dashboard/logic/summary_card_cubit.dart';
 import 'package:blood_bank_hospital/features/dashboard/logic/summary_card_state.dart';
 import 'package:blood_bank_hospital/features/dashboard/ui/active_requests_table.dart';
-import 'package:blood_bank_hospital/features/dashboard/ui/summary_card.dart';import 'package:blood_bank_hospital/features/inventory_management/ui/inventory_management_screen.dart';
+import 'package:blood_bank_hospital/features/dashboard/ui/summary_card.dart';
+import 'package:blood_bank_hospital/features/inventory_management/ui/inventory_management_screen.dart';
 import 'package:blood_bank_hospital/features/past_requests/ui/past_requests_screen.dart';
 import 'package:blood_bank_hospital/features/settings/ui/settings_screen.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +28,10 @@ class DashBoardScreen extends StatefulWidget {
 }
 
 class _DashBoardScreenState extends State<DashBoardScreen> {
-  final _controller = SidebarXController(selectedIndex: 0, extended: true); // Open by default
+  final _controller = SidebarXController(
+    selectedIndex: 0,
+    extended: true,
+  ); // Open by default
   final _key = GlobalKey<ScaffoldState>();
   final _navigatorKey = GlobalKey<NavigatorState>();
 
@@ -93,18 +96,19 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                         builder = (context) =>
                                             const InventoryManagementScreen();
                                         break;
-                                      case Routes.settingsScreen:
-                                        builder = (context) =>
-                                            const SettingsScreen();
-                                        break;
+
                                       case Routes.pastRequesScreen:
                                         builder = (context) =>
                                             const PastRequestsScreen();
                                         break;
+                                      case Routes.settingsScreen:
+                                        builder = (context) =>
+                                            const SettingsScreen();
+                                        break;
                                       default:
                                         builder = (context) => const Center(
-                                              child: Text('Screen Not Found'),
-                                            );
+                                          child: Text('Screen Not Found'),
+                                        );
                                     }
                                     return MaterialPageRoute(
                                       builder: builder,
@@ -115,9 +119,13 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                               case 1:
                                 return const InventoryManagementScreen();
                               case 2:
-                                return const SettingsScreen();
+                                return const PastRequestsScreen();
                               case 3:
-                                WidgetsBinding.instance.addPostFrameCallback((_) {
+                                return const SettingsScreen();
+                              case 4:
+                                WidgetsBinding.instance.addPostFrameCallback((
+                                  _,
+                                ) {
                                   if (mounted) {
                                     context.pushNamedAndRemoveUntil(
                                       Routes.loginScreen,
@@ -126,11 +134,14 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                   }
                                 });
                                 return const Center(
-                                    child: CircularProgressIndicator());
+                                  child: CircularProgressIndicator(),
+                                );
                               default:
                                 return const Center(
-                                  child: Text('Home',
-                                      style: TextStyle(fontSize: 40)),
+                                  child: Text(
+                                    'Home',
+                                    style: TextStyle(fontSize: 40),
+                                  ),
                                 );
                             }
                           },
@@ -148,14 +159,17 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
   }
 
   Widget _buildDashboardContent(
-      BuildContext context, double horizontalPadding) {
+    BuildContext context,
+    double horizontalPadding,
+  ) {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
           create: (context) => GetIt.I<SummaryCardCubit>()..getRequestCounts(),
         ),
         BlocProvider(
-          create: (context) => GetIt.I<ActiveRequestsCubit>()..getActiveRequests(),
+          create: (context) =>
+              GetIt.I<ActiveRequestsCubit>()..getActiveRequests(),
         ),
       ],
       child: SingleChildScrollView(
@@ -170,24 +184,27 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                 child: BlocBuilder<SummaryCardCubit, SummaryCardState>(
                   builder: (context, state) {
                     return state.maybeWhen(
-                      loading: () => const Center(child: CircularProgressIndicator()),
-                      success: (openRequestsCount, pendingRequestsCount) => Wrap(
-                        spacing: horizontalPadding / 2,
-                        runSpacing: horizontalPadding / 2,
-                        children: [
-                          SummaryCard(
-                            number: openRequestsCount.toString(),
-                            title: 'Open Requests',
+                      loading: () =>
+                          const Center(child: CircularProgressIndicator()),
+                      success: (openRequestsCount, pendingRequestsCount) =>
+                          Wrap(
+                            spacing: horizontalPadding / 2,
+                            runSpacing: horizontalPadding / 2,
+                            children: [
+                              SummaryCard(
+                                number: openRequestsCount.toString(),
+                                title: 'Open Requests',
+                              ),
+                              SummaryCard(
+                                number: pendingRequestsCount.toString(),
+                                title: 'Pending Requests',
+                              ),
+                            ],
                           ),
-                          SummaryCard(
-                            number: pendingRequestsCount.toString(),
-                            title: 'Pending Requests',
-                          ),
-                        ],
-                      ),
                       error: (errorHandler) => Center(
                         child: Text(
-                          errorHandler.apiErrorModel.message ?? 'Error fetching counts',
+                          errorHandler.apiErrorModel.message ??
+                              'Error fetching counts',
                         ),
                       ),
                       orElse: () => const SizedBox.shrink(),
@@ -208,24 +225,28 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
               BlocBuilder<ActiveRequestsCubit, ActiveRequestsState>(
                 builder: (context, state) {
                   return state.maybeWhen(
-                    loading: () => const Center(child: CircularProgressIndicator()),
+                    loading: () =>
+                        const Center(child: CircularProgressIndicator()),
                     success: (requests) => ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxHeight: 400.h,
-                      ),
+                      constraints: BoxConstraints(maxHeight: 400.h),
                       child: RecentRequestsTable(
-                        requests: requests.map((req) => {
-                          'id': '#REQ${req.id}',
-                          'bloodType': req.bloodTypeName,
-                          'quantity': '${req.numOfLiter} Units',
-                          'status': req.status,
-                          'dateTime': req.createdAt,
-                        }).toList(),
+                        requests: requests
+                            .map(
+                              (req) => {
+                                'id': '#REQ${req.id}',
+                                'bloodType': req.bloodTypeName,
+                                'quantity': '${req.numOfLiter} Units',
+                                'status': req.status,
+                                'dateTime': req.createdAt,
+                              },
+                            )
+                            .toList(),
                       ),
                     ),
                     error: (errorHandler) => Center(
                       child: Text(
-                        errorHandler.apiErrorModel.message ?? 'Error fetching requests',
+                        errorHandler.apiErrorModel.message ??
+                            'Error fetching requests',
                       ),
                     ),
                     orElse: () => const SizedBox.shrink(),
