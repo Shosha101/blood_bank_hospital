@@ -19,8 +19,8 @@ class SummaryCardCubit extends Cubit<SummaryCardState> {
       final pendingFuture = _summaryCardRepo.getPendingRequestsCount();
 
       final results = await Future.wait([openFuture, pendingFuture]);
-      final openResult = results[0] as ApiResult<int>;
-      final pendingResult = results[1] as ApiResult<int>;
+      final openResult = results[0];
+      final pendingResult = results[1];
 
       openResult.when(
         success: (openCount) {

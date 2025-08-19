@@ -26,7 +26,7 @@ class HospitalApp extends StatelessWidget {
           onGenerateRoute: appRouter.generateRoute,
           builder: (context, widget) {
             return MediaQuery(
-              data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+              data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(1.0)),
               child: widget!,
             );
           },

@@ -55,13 +55,14 @@ extension DonationRequestStatePatterns on DonationRequestState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( DonationRequestStateLoading value)?  loading,TResult Function( DonationRequestStateSuccess value)?  success,TResult Function( DonationRequestStateError value)?  error,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( DonationRequestStateLoading value)?  loading,TResult Function( DonationRequestStateSuccess value)?  success,TResult Function( DonationRequestStateSuccessWithRequests value)?  successWithRequests,TResult Function( DonationRequestStateError value)?  error,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial(_that);case DonationRequestStateLoading() when loading != null:
 return loading(_that);case DonationRequestStateSuccess() when success != null:
-return success(_that);case DonationRequestStateError() when error != null:
+return success(_that);case DonationRequestStateSuccessWithRequests() when successWithRequests != null:
+return successWithRequests(_that);case DonationRequestStateError() when error != null:
 return error(_that);case _:
   return orElse();
 
@@ -80,13 +81,14 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( DonationRequestStateLoading value)  loading,required TResult Function( DonationRequestStateSuccess value)  success,required TResult Function( DonationRequestStateError value)  error,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( DonationRequestStateLoading value)  loading,required TResult Function( DonationRequestStateSuccess value)  success,required TResult Function( DonationRequestStateSuccessWithRequests value)  successWithRequests,required TResult Function( DonationRequestStateError value)  error,}){
 final _that = this;
 switch (_that) {
 case _Initial():
 return initial(_that);case DonationRequestStateLoading():
 return loading(_that);case DonationRequestStateSuccess():
-return success(_that);case DonationRequestStateError():
+return success(_that);case DonationRequestStateSuccessWithRequests():
+return successWithRequests(_that);case DonationRequestStateError():
 return error(_that);case _:
   throw StateError('Unexpected subclass');
 
@@ -104,13 +106,14 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( DonationRequestStateLoading value)?  loading,TResult? Function( DonationRequestStateSuccess value)?  success,TResult? Function( DonationRequestStateError value)?  error,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( DonationRequestStateLoading value)?  loading,TResult? Function( DonationRequestStateSuccess value)?  success,TResult? Function( DonationRequestStateSuccessWithRequests value)?  successWithRequests,TResult? Function( DonationRequestStateError value)?  error,}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial(_that);case DonationRequestStateLoading() when loading != null:
 return loading(_that);case DonationRequestStateSuccess() when success != null:
-return success(_that);case DonationRequestStateError() when error != null:
+return success(_that);case DonationRequestStateSuccessWithRequests() when successWithRequests != null:
+return successWithRequests(_that);case DonationRequestStateError() when error != null:
 return error(_that);case _:
   return null;
 
@@ -128,12 +131,13 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function()?  success,TResult Function( ErrorHandler errorHandler)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function()?  success,TResult Function( List<ActiveRequestsModel> requests)?  successWithRequests,TResult Function( ErrorHandler errorHandler)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case DonationRequestStateLoading() when loading != null:
 return loading();case DonationRequestStateSuccess() when success != null:
-return success();case DonationRequestStateError() when error != null:
+return success();case DonationRequestStateSuccessWithRequests() when successWithRequests != null:
+return successWithRequests(_that.requests);case DonationRequestStateError() when error != null:
 return error(_that.errorHandler);case _:
   return orElse();
 
@@ -152,12 +156,13 @@ return error(_that.errorHandler);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function()  success,required TResult Function( ErrorHandler errorHandler)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function()  success,required TResult Function( List<ActiveRequestsModel> requests)  successWithRequests,required TResult Function( ErrorHandler errorHandler)  error,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case DonationRequestStateLoading():
 return loading();case DonationRequestStateSuccess():
-return success();case DonationRequestStateError():
+return success();case DonationRequestStateSuccessWithRequests():
+return successWithRequests(_that.requests);case DonationRequestStateError():
 return error(_that.errorHandler);case _:
   throw StateError('Unexpected subclass');
 
@@ -175,12 +180,13 @@ return error(_that.errorHandler);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function()?  success,TResult? Function( ErrorHandler errorHandler)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function()?  success,TResult? Function( List<ActiveRequestsModel> requests)?  successWithRequests,TResult? Function( ErrorHandler errorHandler)?  error,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case DonationRequestStateLoading() when loading != null:
 return loading();case DonationRequestStateSuccess() when success != null:
-return success();case DonationRequestStateError() when error != null:
+return success();case DonationRequestStateSuccessWithRequests() when successWithRequests != null:
+return successWithRequests(_that.requests);case DonationRequestStateError() when error != null:
 return error(_that.errorHandler);case _:
   return null;
 
@@ -284,6 +290,78 @@ String toString() {
 
 
 
+
+/// @nodoc
+
+
+class DonationRequestStateSuccessWithRequests implements DonationRequestState {
+  const DonationRequestStateSuccessWithRequests(final  List<ActiveRequestsModel> requests): _requests = requests;
+  
+
+ final  List<ActiveRequestsModel> _requests;
+ List<ActiveRequestsModel> get requests {
+  if (_requests is EqualUnmodifiableListView) return _requests;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_requests);
+}
+
+
+/// Create a copy of DonationRequestState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$DonationRequestStateSuccessWithRequestsCopyWith<DonationRequestStateSuccessWithRequests> get copyWith => _$DonationRequestStateSuccessWithRequestsCopyWithImpl<DonationRequestStateSuccessWithRequests>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DonationRequestStateSuccessWithRequests&&const DeepCollectionEquality().equals(other._requests, _requests));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_requests));
+
+@override
+String toString() {
+  return 'DonationRequestState.successWithRequests(requests: $requests)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $DonationRequestStateSuccessWithRequestsCopyWith<$Res> implements $DonationRequestStateCopyWith<$Res> {
+  factory $DonationRequestStateSuccessWithRequestsCopyWith(DonationRequestStateSuccessWithRequests value, $Res Function(DonationRequestStateSuccessWithRequests) _then) = _$DonationRequestStateSuccessWithRequestsCopyWithImpl;
+@useResult
+$Res call({
+ List<ActiveRequestsModel> requests
+});
+
+
+
+
+}
+/// @nodoc
+class _$DonationRequestStateSuccessWithRequestsCopyWithImpl<$Res>
+    implements $DonationRequestStateSuccessWithRequestsCopyWith<$Res> {
+  _$DonationRequestStateSuccessWithRequestsCopyWithImpl(this._self, this._then);
+
+  final DonationRequestStateSuccessWithRequests _self;
+  final $Res Function(DonationRequestStateSuccessWithRequests) _then;
+
+/// Create a copy of DonationRequestState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? requests = null,}) {
+  return _then(DonationRequestStateSuccessWithRequests(
+null == requests ? _self._requests : requests // ignore: cast_nullable_to_non_nullable
+as List<ActiveRequestsModel>,
+  ));
+}
+
+
+}
 
 /// @nodoc
 

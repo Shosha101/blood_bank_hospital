@@ -11,7 +11,7 @@ part 'inventory_management_api_service.g.dart';
 abstract class InventoryApiService {
   factory InventoryApiService(Dio dio) = _InventoryApiService;
 
-  @GET('Inventory/2')
+  @GET('Inventory/4')
   Future<List<InventoryModel>> getInventory();
   
   

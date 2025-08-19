@@ -13,8 +13,8 @@ import 'package:blood_bank_hospital/features/dashboard/logic/blood_type_cubit.da
 import 'package:blood_bank_hospital/features/dashboard/logic/donation_request_cubit.dart';
 import 'package:blood_bank_hospital/features/dashboard/logic/summary_card_cubit.dart';
 import 'package:blood_bank_hospital/features/settings/data/api/hospital_api_service.dart';
-import 'package:blood_bank_hospital/features/inventory_management/data/api/inventory_management_api_service.dart';
 import 'package:blood_bank_hospital/features/settings/data/repo/hospital_repo.dart';
+import 'package:blood_bank_hospital/features/inventory_management/data/api/inventory_management_api_service.dart';
 import 'package:blood_bank_hospital/features/inventory_management/data/repo/inventory_management_repo.dart';
 import 'package:blood_bank_hospital/features/settings/logic/hospital_cubit.dart';
 import 'package:blood_bank_hospital/features/inventory_management/logic/inventory_management_cubit.dart';
@@ -32,7 +32,7 @@ Future<void> setupGetIt() async {
   DioFactory.resetDio();
   
   // Dio & ApiService
-  Dio dio = await DioFactory.getDio(useCorsProxy: false); // Use direct URL
+  Dio dio = await DioFactory.getDio(useCorsProxy: true); // Use CORS proxy for testing
   getIt.registerLazySingleton<ApiService>(() => ApiService(dio));
 
   // Summary Card
@@ -77,7 +77,7 @@ Future<void> setupGetIt() async {
     () => DonationRequestRepo(getIt()),
   );
   getIt.registerFactory<DonationRequestCubit>(
-    () => DonationRequestCubit(getIt()),
+    () => DonationRequestCubit(getIt<DonationRequestRepo>(), getIt<ActiveRequestsRepo>()),
   );
 
   // Blood Types

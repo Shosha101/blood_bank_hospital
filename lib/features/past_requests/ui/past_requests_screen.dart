@@ -67,7 +67,7 @@ class _PastRequestsState extends State<PastRequestsScreen> {
                                     fontFamily: 'Poppins',
                                     fontWeight: FontWeight.w600,
                                   ),
-                                  headingRowColor: const MaterialStatePropertyAll(
+                                  headingRowColor: const WidgetStatePropertyAll(
                                     Color(0xfffbfafb),
                                   ),
                                   columns: [

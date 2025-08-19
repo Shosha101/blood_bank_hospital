@@ -4,7 +4,6 @@ import 'package:blood_bank_hospital/core/routing/routes.dart';
 import 'package:blood_bank_hospital/core/widgets/sidebar.dart';
 import 'package:blood_bank_hospital/features/dashboard/data/model/donation_request_model.dart';
 import 'package:blood_bank_hospital/features/dashboard/logic/active_requests_table_cubit.dart';
-import 'package:blood_bank_hospital/features/dashboard/logic/active_requests_table_state.dart';
 import 'package:blood_bank_hospital/features/dashboard/logic/donation_request_cubit.dart';
 import 'package:blood_bank_hospital/features/dashboard/logic/donation_request_state.dart';
 import 'package:blood_bank_hospital/features/dashboard/logic/blood_type_cubit.dart';
@@ -191,8 +190,14 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                       spacing: horizontalPadding / 2,
                       runSpacing: horizontalPadding / 2,
                       children: [
-                        SummaryCard(title: 'Open Requests'),
-                        SummaryCard(title: 'Pending Requests'),
+                        SummaryCard(
+                          title: 'Open Requests',
+                          count: openRequestsCount,
+                        ),
+                        SummaryCard(
+                          title: 'Pending Requests',
+                          count: pendingRequestsCount,
+                        ),
                       ],
                     ),
                     error: (errorHandler) => Center(
@@ -220,7 +225,24 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
             BlocListener<DonationRequestCubit, DonationRequestState>(
               listener: (context, state) {
                 state.maybeWhen(
+                  loading: () {
+                    debugPrint('DashBoardScreen: DonationRequestCubit loading');
+                  },
                   success: () {
+                    debugPrint('DashBoardScreen: DonationRequestCubit success');
+                    context.read<SummaryCardCubit>().getRequestCounts();
+                    context.read<ActiveRequestsCubit>().getActiveRequests();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Request added successfully'),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+                  },
+                  successWithRequests: (requests) {
+                    debugPrint('DashBoardScreen: DonationRequestCubit success with ${requests.length} requests');
+                    context.read<SummaryCardCubit>().getRequestCounts();
+                    context.read<ActiveRequestsCubit>().getActiveRequests();
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Request added successfully'),
@@ -229,6 +251,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                     );
                   },
                   error: (errorHandler) {
+                    debugPrint('DashBoardScreen: DonationRequestCubit error - ${errorHandler.apiErrorModel.message}');
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
@@ -400,7 +423,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                               final request = DonationRequestModel(
                                 bloodTypeId: bloodTypeId,
                                 numOfLiter: int.parse(quantityController.text),
-                                hospitalId: 2,
+                                hospitalId: 4,
                               );
                               context.read<DonationRequestCubit>().createDonationRequest(request);
                               Navigator.of(dialogContext).pop();

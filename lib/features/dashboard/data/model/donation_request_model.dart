@@ -1,5 +1,3 @@
-
-// lib/features/dashboard/data/models/donation_request_model.dart
 import 'package:json_annotation/json_annotation.dart';
 
 part 'donation_request_model.g.dart';
@@ -7,19 +5,20 @@ part 'donation_request_model.g.dart';
 @JsonSerializable()
 class DonationRequestModel {
   final int? id;
+  final int? hospitalId;
   final int? bloodTypeId;
   final String? bloodTypeName;
-  final int numOfLiter;
-  final int? hospitalId;
+  final int? numOfLiter;
   final String? status;
-  final String? createdAt;
+  @JsonKey(fromJson: _fromJsonDateTime, toJson: _toJsonDateTime)
+  final DateTime? createdAt;
 
   DonationRequestModel({
     this.id,
+    this.hospitalId,
     this.bloodTypeId,
     this.bloodTypeName,
-    required this.numOfLiter,
-    this.hospitalId,
+    this.numOfLiter,
     this.status,
     this.createdAt,
   });
@@ -27,9 +26,10 @@ class DonationRequestModel {
   factory DonationRequestModel.fromJson(Map<String, dynamic> json) =>
       _$DonationRequestModelFromJson(json);
 
-  Map<String, dynamic> toJson() => {
-        if (bloodTypeId != null) 'bloodTypeId': bloodTypeId,
-        'numOfLiter': numOfLiter,
-        if (hospitalId != null) 'hospitalId': hospitalId,
-      };
+  Map<String, dynamic> toJson() => _$DonationRequestModelToJson(this);
+
+  static DateTime? _fromJsonDateTime(String? date) =>
+      date != null ? DateTime.parse(date) : null;
+
+  static String? _toJsonDateTime(DateTime? date) => date?.toIso8601String();
 }

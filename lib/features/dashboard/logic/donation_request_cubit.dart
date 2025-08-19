@@ -1,39 +1,36 @@
-
-// lib/features/dashboard/logic/donation_request_cubit.dart
-import 'package:blood_bank_hospital/core/networking/api_error_handler.dart';
 import 'package:blood_bank_hospital/core/networking/api_result.dart';
 import 'package:blood_bank_hospital/features/dashboard/data/model/donation_request_model.dart';
+import 'package:blood_bank_hospital/features/dashboard/data/repo/active_requests_table_repo.dart';
 import 'package:blood_bank_hospital/features/dashboard/data/repo/donation_request_repo.dart';
 import 'package:blood_bank_hospital/features/dashboard/logic/donation_request_state.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DonationRequestCubit extends Cubit<DonationRequestState> {
   final DonationRequestRepo _donationRequestRepo;
+  final ActiveRequestsRepo _activeRequestsRepo;
 
-  DonationRequestCubit(this._donationRequestRepo) : super(const DonationRequestState.initial());
+  DonationRequestCubit(this._donationRequestRepo, this._activeRequestsRepo)
+      : super(const DonationRequestState.initial());
 
   void createDonationRequest(DonationRequestModel request) async {
-    print('Sending POST request: ${request.toJson()} to /api/DonationRequest/');
     emit(const DonationRequestState.loading());
-    try {
-      final result = await _donationRequestRepo.createDonationRequest(request);
-      result.when(
-        success: (response) {
-          print('POST response: ${response.toJson()}, id: ${response.id}, createdAt: ${response.createdAt}');
-          emit(const DonationRequestState.success());
-        },
-        failure: (errorHandler) {
-          print('POST error: ${errorHandler.apiErrorModel.message}, code: ${errorHandler.apiErrorModel.code}');
-          emit(DonationRequestState.error(errorHandler));
-        },
-      );
-    } catch (e) {
-      print('Unexpected error in DonationRequestCubit: $e');
-      if (e is DioException) {
-        print('DioException details: type=${e.type}, message=${e.message}, response=${e.response?.data}, statusCode=${e.response?.statusCode}');
-      }
-      emit(DonationRequestState.error(ErrorHandler.handle(e)));
-    }
+    final result = await _donationRequestRepo.createDonationRequest(request);
+    result.when(
+      success: (response) async {
+        // Refetch active requests to update UI
+        final activeRequestsResult = await _activeRequestsRepo.getActiveRequests();
+        activeRequestsResult.when(
+          success: (requests) {
+            emit(DonationRequestState.successWithRequests(requests));
+          },
+          failure: (errorHandler) {
+            emit(DonationRequestState.error(errorHandler));
+          },
+        );
+      },
+      failure: (errorHandler) {
+        emit(DonationRequestState.error(errorHandler));
+      },
+    );
   }
 }

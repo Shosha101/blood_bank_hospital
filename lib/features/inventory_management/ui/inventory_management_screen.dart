@@ -66,7 +66,7 @@ class _InventoryManagementState extends State<InventoryManagementScreen> {
                                     fontWeight: FontWeight.w600,
                                   ),
                                   headingRowColor:
-                                      const MaterialStatePropertyAll(
+                                      const WidgetStatePropertyAll(
                                         Color(0xfffbfafb),
                                       ),
                                   columns: [
