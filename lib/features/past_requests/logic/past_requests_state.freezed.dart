@@ -55,13 +55,14 @@ extension PastRequestsStatePatterns on PastRequestsState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( PastRequestsStateLoading value)?  hospitalsLoading,TResult Function( PastRequestsStateError value)?  hospitalsError,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( PastRequestsStateLoading value)?  loading,TResult Function( PastRequestsStateSuccess value)?  success,TResult Function( PastRequestsStateError value)?  error,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
-return initial(_that);case PastRequestsStateLoading() when hospitalsLoading != null:
-return hospitalsLoading(_that);case PastRequestsStateError() when hospitalsError != null:
-return hospitalsError(_that);case _:
+return initial(_that);case PastRequestsStateLoading() when loading != null:
+return loading(_that);case PastRequestsStateSuccess() when success != null:
+return success(_that);case PastRequestsStateError() when error != null:
+return error(_that);case _:
   return orElse();
 
 }
@@ -79,13 +80,14 @@ return hospitalsError(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( PastRequestsStateLoading value)  hospitalsLoading,required TResult Function( PastRequestsStateError value)  hospitalsError,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( PastRequestsStateLoading value)  loading,required TResult Function( PastRequestsStateSuccess value)  success,required TResult Function( PastRequestsStateError value)  error,}){
 final _that = this;
 switch (_that) {
 case _Initial():
 return initial(_that);case PastRequestsStateLoading():
-return hospitalsLoading(_that);case PastRequestsStateError():
-return hospitalsError(_that);case _:
+return loading(_that);case PastRequestsStateSuccess():
+return success(_that);case PastRequestsStateError():
+return error(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -102,13 +104,14 @@ return hospitalsError(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( PastRequestsStateLoading value)?  hospitalsLoading,TResult? Function( PastRequestsStateError value)?  hospitalsError,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( PastRequestsStateLoading value)?  loading,TResult? Function( PastRequestsStateSuccess value)?  success,TResult? Function( PastRequestsStateError value)?  error,}){
 final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
-return initial(_that);case PastRequestsStateLoading() when hospitalsLoading != null:
-return hospitalsLoading(_that);case PastRequestsStateError() when hospitalsError != null:
-return hospitalsError(_that);case _:
+return initial(_that);case PastRequestsStateLoading() when loading != null:
+return loading(_that);case PastRequestsStateSuccess() when success != null:
+return success(_that);case PastRequestsStateError() when error != null:
+return error(_that);case _:
   return null;
 
 }
@@ -125,12 +128,13 @@ return hospitalsError(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  hospitalsLoading,TResult Function( ErrorHandler errorHandler)?  hospitalsError,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<PastsRequestsModel> pastRequests)?  success,TResult Function( ErrorHandler errorHandler)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
-return initial();case PastRequestsStateLoading() when hospitalsLoading != null:
-return hospitalsLoading();case PastRequestsStateError() when hospitalsError != null:
-return hospitalsError(_that.errorHandler);case _:
+return initial();case PastRequestsStateLoading() when loading != null:
+return loading();case PastRequestsStateSuccess() when success != null:
+return success(_that.pastRequests);case PastRequestsStateError() when error != null:
+return error(_that.errorHandler);case _:
   return orElse();
 
 }
@@ -148,12 +152,13 @@ return hospitalsError(_that.errorHandler);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  hospitalsLoading,required TResult Function( ErrorHandler errorHandler)  hospitalsError,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<PastsRequestsModel> pastRequests)  success,required TResult Function( ErrorHandler errorHandler)  error,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case PastRequestsStateLoading():
-return hospitalsLoading();case PastRequestsStateError():
-return hospitalsError(_that.errorHandler);case _:
+return loading();case PastRequestsStateSuccess():
+return success(_that.pastRequests);case PastRequestsStateError():
+return error(_that.errorHandler);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -170,12 +175,13 @@ return hospitalsError(_that.errorHandler);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  hospitalsLoading,TResult? Function( ErrorHandler errorHandler)?  hospitalsError,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<PastsRequestsModel> pastRequests)?  success,TResult? Function( ErrorHandler errorHandler)?  error,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
-return initial();case PastRequestsStateLoading() when hospitalsLoading != null:
-return hospitalsLoading();case PastRequestsStateError() when hospitalsError != null:
-return hospitalsError(_that.errorHandler);case _:
+return initial();case PastRequestsStateLoading() when loading != null:
+return loading();case PastRequestsStateSuccess() when success != null:
+return success(_that.pastRequests);case PastRequestsStateError() when error != null:
+return error(_that.errorHandler);case _:
   return null;
 
 }
@@ -238,7 +244,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'PastRequestsState.hospitalsLoading()';
+  return 'PastRequestsState.loading()';
 }
 
 
@@ -246,6 +252,78 @@ String toString() {
 
 
 
+
+/// @nodoc
+
+
+class PastRequestsStateSuccess implements PastRequestsState {
+  const PastRequestsStateSuccess(final  List<PastsRequestsModel> pastRequests): _pastRequests = pastRequests;
+  
+
+ final  List<PastsRequestsModel> _pastRequests;
+ List<PastsRequestsModel> get pastRequests {
+  if (_pastRequests is EqualUnmodifiableListView) return _pastRequests;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_pastRequests);
+}
+
+
+/// Create a copy of PastRequestsState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$PastRequestsStateSuccessCopyWith<PastRequestsStateSuccess> get copyWith => _$PastRequestsStateSuccessCopyWithImpl<PastRequestsStateSuccess>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PastRequestsStateSuccess&&const DeepCollectionEquality().equals(other._pastRequests, _pastRequests));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_pastRequests));
+
+@override
+String toString() {
+  return 'PastRequestsState.success(pastRequests: $pastRequests)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $PastRequestsStateSuccessCopyWith<$Res> implements $PastRequestsStateCopyWith<$Res> {
+  factory $PastRequestsStateSuccessCopyWith(PastRequestsStateSuccess value, $Res Function(PastRequestsStateSuccess) _then) = _$PastRequestsStateSuccessCopyWithImpl;
+@useResult
+$Res call({
+ List<PastsRequestsModel> pastRequests
+});
+
+
+
+
+}
+/// @nodoc
+class _$PastRequestsStateSuccessCopyWithImpl<$Res>
+    implements $PastRequestsStateSuccessCopyWith<$Res> {
+  _$PastRequestsStateSuccessCopyWithImpl(this._self, this._then);
+
+  final PastRequestsStateSuccess _self;
+  final $Res Function(PastRequestsStateSuccess) _then;
+
+/// Create a copy of PastRequestsState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? pastRequests = null,}) {
+  return _then(PastRequestsStateSuccess(
+null == pastRequests ? _self._pastRequests : pastRequests // ignore: cast_nullable_to_non_nullable
+as List<PastsRequestsModel>,
+  ));
+}
+
+
+}
 
 /// @nodoc
 
@@ -275,7 +353,7 @@ int get hashCode => Object.hash(runtimeType,errorHandler);
 
 @override
 String toString() {
-  return 'PastRequestsState.hospitalsError(errorHandler: $errorHandler)';
+  return 'PastRequestsState.error(errorHandler: $errorHandler)';
 }
 
 

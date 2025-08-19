@@ -1,6 +1,15 @@
+
+// lib/features/past_requests/ui/past_requests_screen.dart
+import 'package:blood_bank_hospital/features/past_requests/data/model/pasts_requests_model.dart';
+
+import 'package:blood_bank_hospital/features/past_requests/logic/past_requests_cubit.dart';
+import 'package:blood_bank_hospital/features/past_requests/logic/past_requests_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:intl/intl.dart';
 
 class PastRequestsScreen extends StatefulWidget {
   const PastRequestsScreen({super.key});
@@ -10,130 +19,136 @@ class PastRequestsScreen extends StatefulWidget {
 }
 
 class _PastRequestsState extends State<PastRequestsScreen> {
-  final List<Map<String, String>> pastRequests = List.generate(
-    5,
-    (index) => {
-      'id': '#REQ${index + 101}', // Just example IDs
-      'bloodType': ['A+', 'B+', 'O-', 'AB+'][index % 4],
-      'quantity': '${(index + 1) * 2} Units',
-      'status': ['Completed', 'In Progress', 'Pending'][index % 3],
-      'dateTime': '2025-07-30 09:3$index AM',
-    },
-  );
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Past Requests'),
-        backgroundColor: Colors.white,
-        elevation: 0.5,
-      ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 20.h),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Past Requests',
-              style: TextStyle(fontSize: 22.spMax, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 20.h),
-            Expanded(
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  return SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: Container(
-                      width: constraints.maxWidth,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16.r),
-                        border: Border.all(color: HexColor('#637887')),
+    return BlocProvider(
+      create: (context) => GetIt.I<PastRequestsCubit>()..getPastRequests(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Past Requests'),
+          backgroundColor: Colors.white,
+          elevation: 0.5,
+        ),
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 20.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Past Requests',
+                style: TextStyle(fontSize: 22.spMax, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 20.h),
+              Expanded(
+                child: BlocBuilder<PastRequestsCubit, PastRequestsState>(
+                  builder: (context, state) {
+                    return state.maybeWhen(
+                      loading: () => const Center(child: CircularProgressIndicator()),
+                      success: (completedRequests) => LayoutBuilder(
+                        builder: (context, constraints) {
+                          return SingleChildScrollView(
+                            scrollDirection: Axis.vertical,
+                            child: Container(
+                              width: constraints.maxWidth,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(16.r),
+                                border: Border.all(color: HexColor('#637887')),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: DataTable(
+                                  headingRowHeight: 44.h,
+                                  dataRowMaxHeight: 72.h,
+                                  columnSpacing: 24.w,
+                                  headingTextStyle: TextStyle(
+                                    color: Color(0xff42526d),
+                                    fontSize: 12.spMax,
+                                    fontFamily: 'Poppins',
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  headingRowColor: const MaterialStatePropertyAll(
+                                    Color(0xfffbfafb),
+                                  ),
+                                  columns: [
+                                    DataColumn(
+                                      label: Text(
+                                        'Request ID',
+                                        style: TextStyle(
+                                          fontSize: 12.spMax,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ),
+                                    DataColumn(
+                                      label: Text(
+                                        'Blood Type',
+                                        style: TextStyle(
+                                          fontSize: 12.spMax,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ),
+                                    DataColumn(
+                                      label: Text(
+                                        'Quantity',
+                                        style: TextStyle(
+                                          fontSize: 12.spMax,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ),
+                                    DataColumn(
+                                      label: Text(
+                                        'Status',
+                                        style: TextStyle(
+                                          fontSize: 12.spMax,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ),
+                                    DataColumn(
+                                      label: Text(
+                                        'Date & Time',
+                                        style: TextStyle(
+                                          fontSize: 12.spMax,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                  rows: List.generate(
+                                    completedRequests.length,
+                                    (index) => _dataRow(completedRequests[index], context),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: DataTable(
-                          headingRowHeight: 44.h,
-                          dataRowMaxHeight: 72.h,
-                          columnSpacing: 24.w,
-                          headingTextStyle: TextStyle(
-                            color: Color(0xff42526d),
-                            fontSize: 12.spMax,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w600,
-                          ),
-                          headingRowColor: const MaterialStatePropertyAll(
-                            Color(0xfffbfafb),
-                          ),
-                          columns: [
-                            DataColumn(
-                              label: Text(
-                                'Request ID',
-                                style: TextStyle(
-                                  fontSize: 12.spMax,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Text(
-                                'Blood Type',
-                                style: TextStyle(
-                                  fontSize: 12.spMax,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Text(
-                                'Quantity',
-                                style: TextStyle(
-                                  fontSize: 12.spMax,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Text(
-                                'Status',
-                                style: TextStyle(
-                                  fontSize: 12.spMax,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ),
-                            DataColumn(
-                              label: Text(
-                                'Date & Time',
-                                style: TextStyle(
-                                  fontSize: 12.spMax,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ),
-                          ],
-                          rows: List.generate(
-                            pastRequests.length,
-                            (index) => _dataRow(pastRequests[index], context),
-                          ),
+                      error: (errorHandler) => Center(
+                        child: Text(
+                          errorHandler.apiErrorModel.message ?? 'Error fetching past requests',
+                          style: TextStyle(fontSize: 16.spMax, color: Colors.red),
                         ),
                       ),
-                    ),
-                  );
-                },
+                      orElse: () => const Center(child: Text('No past requests found')),
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 
-  DataRow _dataRow(Map<String, String> data, BuildContext context) {
+  DataRow _dataRow(PastsRequestsModel request, BuildContext context) {
     Color? bColor;
     Color? fColor;
-    switch (data['status']) {
+    switch (request.status) {
       case 'Completed':
         bColor = HexColor('#ECFDF3');
         fColor = HexColor('#009881');
@@ -150,11 +165,9 @@ class _PastRequestsState extends State<PastRequestsScreen> {
 
     return DataRow(
       cells: [
-        DataCell(Text(data['id']!, style: TextStyle(fontSize: 10.spMax))),
-        DataCell(
-          Text(data['bloodType']!, style: TextStyle(fontSize: 10.spMax)),
-        ),
-        DataCell(Text(data['quantity']!, style: TextStyle(fontSize: 10.spMax))),
+        DataCell(Text('#REQ${request.id}', style: TextStyle(fontSize: 10.spMax))),
+        DataCell(Text(request.bloodTypeName, style: TextStyle(fontSize: 10.spMax))),
+        DataCell(Text('${request.numOfLiter} Units', style: TextStyle(fontSize: 10.spMax))),
         DataCell(
           Container(
             width: 73.w,
@@ -165,7 +178,7 @@ class _PastRequestsState extends State<PastRequestsScreen> {
             ),
             child: Center(
               child: Text(
-                data['status']!,
+                request.status,
                 style: TextStyle(
                   color: fColor,
                   fontSize: 12.spMax,
@@ -175,7 +188,12 @@ class _PastRequestsState extends State<PastRequestsScreen> {
             ),
           ),
         ),
-        DataCell(Text(data['dateTime']!, style: TextStyle(fontSize: 10.spMax))),
+        DataCell(
+          Text(
+            DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(request.createdAt)),
+            style: TextStyle(fontSize: 10.spMax),
+          ),
+        ),
       ],
     );
   }
