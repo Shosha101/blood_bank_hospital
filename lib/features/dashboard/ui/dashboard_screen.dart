@@ -46,8 +46,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
           create: (context) => GetIt.I<SummaryCardCubit>()..getRequestCounts(),
         ),
         BlocProvider(
-          create: (context) =>
-              GetIt.I<ActiveRequestsCubit>()..getActiveRequests(),
+          create: (context) => GetIt.I<ActiveRequestsCubit>()..getActiveRequests(),
         ),
         BlocProvider(create: (context) => GetIt.I<DonationRequestCubit>()),
         BlocProvider(create: (context) => GetIt.I<BloodTypeCubit>()),
@@ -121,8 +120,8 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                           break;
                                         default:
                                           builder = (context) => const Center(
-                                            child: Text('Screen Not Found'),
-                                          );
+                                                child: Text('Screen Not Found'),
+                                              );
                                       }
                                       return MaterialPageRoute(
                                         builder: builder,
@@ -137,9 +136,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                 case 3:
                                   return const SettingsScreen();
                                 case 4:
-                                  WidgetsBinding.instance.addPostFrameCallback((
-                                    _,
-                                  ) {
+                                  WidgetsBinding.instance.addPostFrameCallback((_) {
                                     if (mounted) {
                                       context.pushNamedAndRemoveUntil(
                                         Routes.loginScreen,
@@ -189,8 +186,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
               child: BlocBuilder<SummaryCardCubit, SummaryCardState>(
                 builder: (context, state) {
                   return state.maybeWhen(
-                    loading: () =>
-                        const Center(child: CircularProgressIndicator()),
+                    loading: () => const Center(child: CircularProgressIndicator()),
                     success: (openRequestsCount, pendingRequestsCount) => Wrap(
                       spacing: horizontalPadding / 2,
                       runSpacing: horizontalPadding / 2,
@@ -201,8 +197,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                     ),
                     error: (errorHandler) => Center(
                       child: Text(
-                        errorHandler.apiErrorModel.message ??
-                            'Error fetching counts',
+                        errorHandler.apiErrorModel.message ?? 'Error fetching counts',
                       ),
                     ),
                     orElse: () => const SizedBox.shrink(),
@@ -237,8 +232,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
-                          errorHandler.apiErrorModel.message ??
-                              'Failed to add request',
+                          errorHandler.apiErrorModel.message ?? 'Failed to add request',
                         ),
                         backgroundColor: Colors.red,
                       ),
@@ -303,8 +297,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   state.maybeWhen(
-                    loading: () =>
-                        const Center(child: CircularProgressIndicator()),
+                    loading: () => const Center(child: CircularProgressIndicator()),
                     success: (bloodTypes) => DropdownButtonFormField2<String>(
                       decoration: InputDecoration(
                         labelText: 'Blood Type',
@@ -324,13 +317,11 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                       onChanged: (value) {
                         selectedBloodType = value;
                       },
-                      validator: (value) =>
-                          value == null ? 'Please select a blood type' : null,
+                      validator: (value) => value == null ? 'Please select a blood type' : null,
                     ),
                     error: (errorHandler) => Center(
                       child: Text(
-                        errorHandler.apiErrorModel.message ??
-                            'Error fetching blood types',
+                        errorHandler.apiErrorModel.message ?? 'Error fetching blood types',
                         style: const TextStyle(color: Colors.red),
                       ),
                     ),
@@ -353,8 +344,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                       onChanged: (value) {
                         selectedBloodType = value;
                       },
-                      validator: (value) =>
-                          value == null ? 'Please select a blood type' : null,
+                      validator: (value) => value == null ? 'Please select a blood type' : null,
                     ),
                   ),
                   SizedBox(height: 10.h),
@@ -389,9 +379,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                             state.maybeWhen(
                               success: (bloodTypes) {
                                 bloodTypeId = bloodTypes
-                                    .firstWhere(
-                                      (type) => type.name == selectedBloodType,
-                                    )
+                                    .firstWhere((type) => type.name == selectedBloodType)
                                     .id;
                               },
                               orElse: () {
@@ -414,9 +402,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                 numOfLiter: int.parse(quantityController.text),
                                 hospitalId: 2,
                               );
-                              context
-                                  .read<DonationRequestCubit>()
-                                  .createDonationRequest(request);
+                              context.read<DonationRequestCubit>().createDonationRequest(request);
                               Navigator.of(dialogContext).pop();
                             } else {
                               ScaffoldMessenger.of(dialogContext).showSnackBar(

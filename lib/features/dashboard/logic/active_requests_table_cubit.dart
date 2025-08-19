@@ -16,7 +16,7 @@ class ActiveRequestsCubit extends Cubit<ActiveRequestsState> {
       final result = await _activeRequestsRepo.getActiveRequests();
       result.when(
         success: (requests) {
-          // Filter requests to match summary card criteria
+          // Filter requests to include only "Open" and "Pending" statuses
           final filteredRequests = requests.where((req) => ['Open', 'Pending'].contains(req.status)).toList();
           print('Filtered active requests: ${filteredRequests.length}'); // Debug log
           emit(ActiveRequestsState.success(filteredRequests));

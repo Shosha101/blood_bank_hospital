@@ -30,8 +30,7 @@ class RecentRequestsTable extends StatelessWidget {
               return LayoutBuilder(
                 builder: (context, constraints) {
                   return state.maybeWhen(
-                    loading: () =>
-                        const Center(child: CircularProgressIndicator()),
+                    loading: () => const Center(child: CircularProgressIndicator()),
                     success: (requests) => Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -61,10 +60,9 @@ class RecentRequestsTable extends StatelessWidget {
                                       fontWeight: FontWeight.w600,
                                       overflow: TextOverflow.ellipsis,
                                     ),
-                                    headingRowColor:
-                                        const WidgetStatePropertyAll(
-                                          Color(0xfffbfafb),
-                                        ),
+                                    headingRowColor: const WidgetStatePropertyAll(
+                                      Color(0xfffbfafb),
+                                    ),
                                     columns: [
                                       DataColumn(
                                         label: Text(
@@ -124,8 +122,7 @@ class RecentRequestsTable extends StatelessWidget {
                                     ],
                                     rows: List.generate(
                                       requests.length,
-                                      (index) =>
-                                          _dataRow(requests[index], context),
+                                      (index) => _dataRow(requests[index], context),
                                     ),
                                   ),
                                 ),
@@ -137,8 +134,7 @@ class RecentRequestsTable extends StatelessWidget {
                     ),
                     error: (errorHandler) => Center(
                       child: Text(
-                        errorHandler.apiErrorModel.message ??
-                            'Error fetching requests',
+                        errorHandler.apiErrorModel.message ?? 'Error fetching requests',
                       ),
                     ),
                     orElse: () => const SizedBox.shrink(),

@@ -1,4 +1,3 @@
-// lib/core/di/setup_get_it.dart
 import 'package:blood_bank_hospital/core/networking/api_service.dart';
 import 'package:blood_bank_hospital/core/networking/dio_factory.dart';
 import 'package:blood_bank_hospital/features/dashboard/data/api/active_requests_table_api_service.dart';
@@ -13,12 +12,16 @@ import 'package:blood_bank_hospital/features/dashboard/logic/active_requests_tab
 import 'package:blood_bank_hospital/features/dashboard/logic/blood_type_cubit.dart';
 import 'package:blood_bank_hospital/features/dashboard/logic/donation_request_cubit.dart';
 import 'package:blood_bank_hospital/features/dashboard/logic/summary_card_cubit.dart';
+import 'package:blood_bank_hospital/features/settings/data/api/hospital_api_service.dart';
 import 'package:blood_bank_hospital/features/inventory_management/data/api/inventory_management_api_service.dart';
+import 'package:blood_bank_hospital/features/settings/data/repo/hospital_repo.dart';
 import 'package:blood_bank_hospital/features/inventory_management/data/repo/inventory_management_repo.dart';
+import 'package:blood_bank_hospital/features/settings/logic/hospital_cubit.dart';
 import 'package:blood_bank_hospital/features/inventory_management/logic/inventory_management_cubit.dart';
 import 'package:blood_bank_hospital/features/past_requests/data/api/past_requests_api_service.dart';
 import 'package:blood_bank_hospital/features/past_requests/data/repo/past_requests_repo.dart';
 import 'package:blood_bank_hospital/features/past_requests/logic/past_requests_cubit.dart';
+
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 
@@ -81,4 +84,9 @@ Future<void> setupGetIt() async {
   getIt.registerLazySingleton<BloodTypeApiService>(() => BloodTypeApiService(dio));
   getIt.registerLazySingleton<BloodTypeRepo>(() => BloodTypeRepo(getIt()));
   getIt.registerFactory<BloodTypeCubit>(() => BloodTypeCubit(getIt()));
+
+  // Hospital
+  getIt.registerLazySingleton<HospitalApiService>(() => HospitalApiService(dio));
+  getIt.registerLazySingleton<HospitalRepo>(() => HospitalRepo(getIt()));
+  getIt.registerFactory<HospitalCubit>(() => HospitalCubit(getIt()));
 }
