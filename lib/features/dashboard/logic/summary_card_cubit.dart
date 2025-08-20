@@ -16,19 +16,19 @@ class SummaryCardCubit extends Cubit<SummaryCardState> {
 
     try {
       final openFuture = _summaryCardRepo.getOpenRequestsCount();
-      final pendingFuture = _summaryCardRepo.getPendingRequestsCount();
+      final completedFuture = _summaryCardRepo.getCompletedRequestsCount();
 
-      final results = await Future.wait([openFuture, pendingFuture]);
+      final results = await Future.wait([openFuture, completedFuture]);
       final openResult = results[0];
-      final pendingResult = results[1];
+      final completedResult = results[1];
 
       openResult.when(
         success: (openCount) {
-          pendingResult.when(
-            success: (pendingCount) {
+          completedResult.when(
+            success: (completedCount) {
               emit(SummaryCardState.success(
                 openRequestsCount: openCount,
-                pendingRequestsCount: pendingCount,
+                completedRequestsCount: completedCount,
               ));
             },
             failure: (errorHandler) {

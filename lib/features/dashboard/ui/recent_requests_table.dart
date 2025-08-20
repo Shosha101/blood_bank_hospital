@@ -267,7 +267,7 @@ class RecentRequestsTable extends StatelessWidget {
         bColor = HexColor('#E9F3FF');
         fColor = HexColor('#4A72FF');
         break;
-      case 'Pending':
+      case 'Open':
         bColor = HexColor('#FFFADF');
         fColor = HexColor('#ECA600');
         break;

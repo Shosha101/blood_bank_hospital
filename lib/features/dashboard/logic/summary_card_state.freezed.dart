@@ -128,12 +128,12 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( int openRequestsCount,  int pendingRequestsCount)?  success,TResult Function( ErrorHandler errorHandler)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( int openRequestsCount,  int completedRequestsCount)?  success,TResult Function( ErrorHandler errorHandler)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case SummaryCardStateLoading() when loading != null:
 return loading();case SummaryCardStateSuccess() when success != null:
-return success(_that.openRequestsCount,_that.pendingRequestsCount);case SummaryCardStateError() when error != null:
+return success(_that.openRequestsCount,_that.completedRequestsCount);case SummaryCardStateError() when error != null:
 return error(_that.errorHandler);case _:
   return orElse();
 
@@ -152,12 +152,12 @@ return error(_that.errorHandler);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( int openRequestsCount,  int pendingRequestsCount)  success,required TResult Function( ErrorHandler errorHandler)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( int openRequestsCount,  int completedRequestsCount)  success,required TResult Function( ErrorHandler errorHandler)  error,}) {final _that = this;
 switch (_that) {
 case _Initial():
 return initial();case SummaryCardStateLoading():
 return loading();case SummaryCardStateSuccess():
-return success(_that.openRequestsCount,_that.pendingRequestsCount);case SummaryCardStateError():
+return success(_that.openRequestsCount,_that.completedRequestsCount);case SummaryCardStateError():
 return error(_that.errorHandler);case _:
   throw StateError('Unexpected subclass');
 
@@ -175,12 +175,12 @@ return error(_that.errorHandler);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( int openRequestsCount,  int pendingRequestsCount)?  success,TResult? Function( ErrorHandler errorHandler)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( int openRequestsCount,  int completedRequestsCount)?  success,TResult? Function( ErrorHandler errorHandler)?  error,}) {final _that = this;
 switch (_that) {
 case _Initial() when initial != null:
 return initial();case SummaryCardStateLoading() when loading != null:
 return loading();case SummaryCardStateSuccess() when success != null:
-return success(_that.openRequestsCount,_that.pendingRequestsCount);case SummaryCardStateError() when error != null:
+return success(_that.openRequestsCount,_that.completedRequestsCount);case SummaryCardStateError() when error != null:
 return error(_that.errorHandler);case _:
   return null;
 
@@ -257,11 +257,11 @@ String toString() {
 
 
 class SummaryCardStateSuccess implements SummaryCardState {
-  const SummaryCardStateSuccess({required this.openRequestsCount, required this.pendingRequestsCount});
+  const SummaryCardStateSuccess({required this.openRequestsCount, required this.completedRequestsCount});
   
 
  final  int openRequestsCount;
- final  int pendingRequestsCount;
+ final  int completedRequestsCount;
 
 /// Create a copy of SummaryCardState
 /// with the given fields replaced by the non-null parameter values.
@@ -273,16 +273,16 @@ $SummaryCardStateSuccessCopyWith<SummaryCardStateSuccess> get copyWith => _$Summ
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SummaryCardStateSuccess&&(identical(other.openRequestsCount, openRequestsCount) || other.openRequestsCount == openRequestsCount)&&(identical(other.pendingRequestsCount, pendingRequestsCount) || other.pendingRequestsCount == pendingRequestsCount));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SummaryCardStateSuccess&&(identical(other.openRequestsCount, openRequestsCount) || other.openRequestsCount == openRequestsCount)&&(identical(other.completedRequestsCount, completedRequestsCount) || other.completedRequestsCount == completedRequestsCount));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,openRequestsCount,pendingRequestsCount);
+int get hashCode => Object.hash(runtimeType,openRequestsCount,completedRequestsCount);
 
 @override
 String toString() {
-  return 'SummaryCardState.success(openRequestsCount: $openRequestsCount, pendingRequestsCount: $pendingRequestsCount)';
+  return 'SummaryCardState.success(openRequestsCount: $openRequestsCount, completedRequestsCount: $completedRequestsCount)';
 }
 
 
@@ -293,7 +293,7 @@ abstract mixin class $SummaryCardStateSuccessCopyWith<$Res> implements $SummaryC
   factory $SummaryCardStateSuccessCopyWith(SummaryCardStateSuccess value, $Res Function(SummaryCardStateSuccess) _then) = _$SummaryCardStateSuccessCopyWithImpl;
 @useResult
 $Res call({
- int openRequestsCount, int pendingRequestsCount
+ int openRequestsCount, int completedRequestsCount
 });
 
 
@@ -310,10 +310,10 @@ class _$SummaryCardStateSuccessCopyWithImpl<$Res>
 
 /// Create a copy of SummaryCardState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? openRequestsCount = null,Object? pendingRequestsCount = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? openRequestsCount = null,Object? completedRequestsCount = null,}) {
   return _then(SummaryCardStateSuccess(
 openRequestsCount: null == openRequestsCount ? _self.openRequestsCount : openRequestsCount // ignore: cast_nullable_to_non_nullable
-as int,pendingRequestsCount: null == pendingRequestsCount ? _self.pendingRequestsCount : pendingRequestsCount // ignore: cast_nullable_to_non_nullable
+as int,completedRequestsCount: null == completedRequestsCount ? _self.completedRequestsCount : completedRequestsCount // ignore: cast_nullable_to_non_nullable
 as int,
   ));
 }

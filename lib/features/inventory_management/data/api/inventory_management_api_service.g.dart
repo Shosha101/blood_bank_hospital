@@ -29,7 +29,7 @@ class _InventoryApiService implements InventoryApiService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'Inventory/4',
+            'Inventory/14',
             queryParameters: queryParameters,
             data: _data,
           )

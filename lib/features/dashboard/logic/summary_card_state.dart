@@ -12,7 +12,7 @@ class SummaryCardState with _$SummaryCardState {
 
   const factory SummaryCardState.success({
     required int openRequestsCount,
-    required int pendingRequestsCount,
+    required int completedRequestsCount,
   }) = SummaryCardStateSuccess;
 
   const factory SummaryCardState.error(ErrorHandler errorHandler) = SummaryCardStateError;

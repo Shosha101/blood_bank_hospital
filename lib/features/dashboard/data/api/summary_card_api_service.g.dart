@@ -29,7 +29,7 @@ class _SummaryCardApiService implements SummaryCardApiService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'DonationRequest/hospital/open-requests/4',
+            'DonationRequest/hospital/open-requests/14',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -47,7 +47,7 @@ class _SummaryCardApiService implements SummaryCardApiService {
   }
 
   @override
-  Future<int> getPendingRequestsCount() async {
+  Future<int> getCompletedRequestsCount() async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -56,7 +56,7 @@ class _SummaryCardApiService implements SummaryCardApiService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'DonationRequest/hospital/pending-requests/4',
+            'DonationRequest/hospital/completed-requests/14',
             queryParameters: queryParameters,
             data: _data,
           )

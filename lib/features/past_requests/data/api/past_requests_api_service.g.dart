@@ -29,7 +29,7 @@ class _PastRequestsApiService implements PastRequestsApiService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'DonationRequest/hospital/completed/4',
+            'DonationRequest/hospital/completed/14',
             queryParameters: queryParameters,
             data: _data,
           )

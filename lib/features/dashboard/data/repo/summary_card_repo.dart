@@ -17,9 +17,9 @@ class SummaryCardRepo {
     }
   }
 
-  Future<ApiResult<int>> getPendingRequestsCount() async {
+  Future<ApiResult<int>> getCompletedRequestsCount() async {
     try {
-      final count = await _summaryCardApiService.getPendingRequestsCount();
+      final count = await _summaryCardApiService.getCompletedRequestsCount();
       return ApiResult.success(count);
     } catch (error) {
       return ApiResult.failure(ErrorHandler.handle(error));

@@ -195,7 +195,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                           count: openRequestsCount,
                         ),
                         SummaryCard(
-                          title: 'Pending Requests',
+                          title: 'Completed Requests',
                           count: pendingRequestsCount,
                         ),
                       ],
@@ -423,7 +423,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                               final request = DonationRequestModel(
                                 bloodTypeId: bloodTypeId,
                                 numOfLiter: int.parse(quantityController.text),
-                                hospitalId: 4,
+                                hospitalId: 14,
                               );
                               context.read<DonationRequestCubit>().createDonationRequest(request);
                               Navigator.of(dialogContext).pop();
