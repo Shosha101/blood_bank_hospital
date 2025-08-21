@@ -40,18 +40,16 @@ class LoginResponse {
 
   @override
   String toString() {
-    return 'LoginResponse(message: $message, userId: $userId, token: $token)';
+    return 'LoginResponse(message: $message, userId: $userId)';
   }
 
   LoginResponse copyWith({
     String? message,
     int? userId,
-    String? token,
   }) {
     return LoginResponse(
       message: message ?? this.message,
       userId: userId ?? this.userId,
-      token: token ?? this.token,
     );
   }
 }

@@ -1,5 +1,5 @@
 class ApiConstants {
-static const String apiBaseUrl = "http://hemolink.runasp.net/api/";
+static const String apiBaseUrl = "https://hemolink.runasp.net/api/";
   
 }
 

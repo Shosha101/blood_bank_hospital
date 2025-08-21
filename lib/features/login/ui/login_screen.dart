@@ -1,4 +1,6 @@
+import 'package:blood_bank_hospital/core/extension/navigation_extension.dart';
 import 'package:blood_bank_hospital/core/helpers/spacing.dart';
+import 'package:blood_bank_hospital/core/routing/routes.dart';
 import 'package:blood_bank_hospital/core/theming/colors.dart';
 import 'package:blood_bank_hospital/features/login/logic/login_cubit.dart';
 import 'package:blood_bank_hospital/features/login/logic/login_state.dart';
@@ -136,7 +138,22 @@ class _LoginScreenState extends State<LoginScreen> {
                     SizedBox(
                       width: 460.w,
                       height: 40.h,
-                      child: BlocBuilder<LoginCubit, LoginState>(
+                      child: BlocConsumer<LoginCubit, LoginState>(
+                        listener: (context, state) {
+                          if (state is LoginStateSuccess) {
+                            print('Login successful: ${state.loginResponse}');
+                            context.pushReplacementNamed(Routes.dashboardScreen);
+                          } else if (state is LoginStateError) {
+                            print('Login error: ${state.errorHandler.apiErrorModel.message}');
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  state.errorHandler.apiErrorModel.message ?? 'Unknown error',
+                                ),
+                              ),
+                            );
+                          }
+                        },
                         builder: (context, state) {
                           return state is LoginStateLoading
                               ? const Center(child: CircularProgressIndicator())

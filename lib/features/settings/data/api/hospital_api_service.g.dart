@@ -10,7 +10,7 @@ part of 'hospital_api_service.dart';
 
 class _HospitalApiService implements HospitalApiService {
   _HospitalApiService(this._dio, {this.baseUrl, this.errorLogger}) {
-    baseUrl ??= 'http://hemolink.runasp.net/api/';
+    baseUrl ??= 'https://hemolink.runasp.net/api/';
   }
 
   final Dio _dio;
@@ -29,7 +29,7 @@ class _HospitalApiService implements HospitalApiService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'hospital/16',
+            'Hospital/profile',
             queryParameters: queryParameters,
             data: _data,
           )

@@ -11,6 +11,6 @@ part 'active_requests_table_api_service.g.dart';
 abstract class ActiveRequestsApiService {
   factory ActiveRequestsApiService(Dio dio) = _ActiveRequestsApiService;
 
-  @GET('DonationRequest/hospital/active/16')
+  @GET('DonationRequest/hospital/active')
   Future<List<ActiveRequestsModel>> getActiveRequests();
 }

@@ -10,7 +10,7 @@ part of 'blood_type_api_service.dart';
 
 class _BloodTypeApiService implements BloodTypeApiService {
   _BloodTypeApiService(this._dio, {this.baseUrl, this.errorLogger}) {
-    baseUrl ??= 'http://hemolink.runasp.net/api/';
+    baseUrl ??= 'https://hemolink.runasp.net/api/';
   }
 
   final Dio _dio;

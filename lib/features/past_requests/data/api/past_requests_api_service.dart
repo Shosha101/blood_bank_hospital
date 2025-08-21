@@ -11,6 +11,6 @@ part 'past_requests_api_service.g.dart';
 abstract class PastRequestsApiService {
   factory PastRequestsApiService(Dio dio) = _PastRequestsApiService;
 
-  @GET('DonationRequest/hospital/completed/16')
+  @GET('DonationRequest/hospital/completed')
   Future<List<PastsRequestsModel>> getPastRequests();
 }

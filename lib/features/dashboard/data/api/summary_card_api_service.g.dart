@@ -10,7 +10,7 @@ part of 'summary_card_api_service.dart';
 
 class _SummaryCardApiService implements SummaryCardApiService {
   _SummaryCardApiService(this._dio, {this.baseUrl, this.errorLogger}) {
-    baseUrl ??= 'http://hemolink.runasp.net/api/';
+    baseUrl ??= 'https://hemolink.runasp.net/api/';
   }
 
   final Dio _dio;
@@ -29,7 +29,7 @@ class _SummaryCardApiService implements SummaryCardApiService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'DonationRequest/hospital/open-requests/16',
+            'DonationRequest/hospital/open-requests',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -56,7 +56,7 @@ class _SummaryCardApiService implements SummaryCardApiService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'DonationRequest/hospital/completed-requests/16',
+            'DonationRequest/hospital/completed-requests',
             queryParameters: queryParameters,
             data: _data,
           )

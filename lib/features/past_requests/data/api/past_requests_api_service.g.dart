@@ -10,7 +10,7 @@ part of 'past_requests_api_service.dart';
 
 class _PastRequestsApiService implements PastRequestsApiService {
   _PastRequestsApiService(this._dio, {this.baseUrl, this.errorLogger}) {
-    baseUrl ??= 'http://hemolink.runasp.net/api/';
+    baseUrl ??= 'https://hemolink.runasp.net/api/';
   }
 
   final Dio _dio;
@@ -29,7 +29,7 @@ class _PastRequestsApiService implements PastRequestsApiService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'DonationRequest/hospital/completed/16',
+            'DonationRequest/hospital/completed',
             queryParameters: queryParameters,
             data: _data,
           )

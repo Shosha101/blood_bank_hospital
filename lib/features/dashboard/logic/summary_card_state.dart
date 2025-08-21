@@ -1,4 +1,3 @@
-// lib/features/summary_card/logic/summary_card_state.dart
 import 'package:blood_bank_hospital/core/networking/api_error_handler.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -16,4 +15,4 @@ class SummaryCardState with _$SummaryCardState {
   }) = SummaryCardStateSuccess;
 
   const factory SummaryCardState.error(ErrorHandler errorHandler) = SummaryCardStateError;
-} 
+}

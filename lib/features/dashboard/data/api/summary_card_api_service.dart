@@ -1,4 +1,3 @@
-// lib/features/summary_card/data/api/summary_card_api_service.dart
 import 'package:blood_bank_hospital/core/networking/api_constants.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
@@ -9,9 +8,9 @@ part 'summary_card_api_service.g.dart';
 abstract class SummaryCardApiService {
   factory SummaryCardApiService(Dio dio) = _SummaryCardApiService;
 
-  @GET('DonationRequest/hospital/open-requests/16')
+  @GET('DonationRequest/hospital/open-requests')
   Future<int> getOpenRequestsCount();
 
-  @GET('DonationRequest/hospital/completed-requests/16')
+  @GET('DonationRequest/hospital/completed-requests')
   Future<int> getCompletedRequestsCount();
 }

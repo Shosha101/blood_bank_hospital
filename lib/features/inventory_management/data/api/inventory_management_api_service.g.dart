@@ -10,7 +10,7 @@ part of 'inventory_management_api_service.dart';
 
 class _InventoryApiService implements InventoryApiService {
   _InventoryApiService(this._dio, {this.baseUrl, this.errorLogger}) {
-    baseUrl ??= 'http://hemolink.runasp.net/api/';
+    baseUrl ??= 'https://hemolink.runasp.net/api/';
   }
 
   final Dio _dio;
@@ -29,7 +29,7 @@ class _InventoryApiService implements InventoryApiService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'Inventory/16',
+            'Inventory',
             queryParameters: queryParameters,
             data: _data,
           )

@@ -10,7 +10,7 @@ part of 'active_requests_table_api_service.dart';
 
 class _ActiveRequestsApiService implements ActiveRequestsApiService {
   _ActiveRequestsApiService(this._dio, {this.baseUrl, this.errorLogger}) {
-    baseUrl ??= 'http://hemolink.runasp.net/api/';
+    baseUrl ??= 'https://hemolink.runasp.net/api/';
   }
 
   final Dio _dio;
@@ -29,7 +29,7 @@ class _ActiveRequestsApiService implements ActiveRequestsApiService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'DonationRequest/hospital/active/16',
+            'DonationRequest/hospital/active',
             queryParameters: queryParameters,
             data: _data,
           )
