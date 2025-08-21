@@ -1,13 +1,20 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get_it/get_it.dart';
+import 'package:hexcolor/hexcolor.dart';
+import 'package:sidebarx/sidebarx.dart';
 import 'package:blood_bank_hospital/core/extension/navigation_extension.dart';
+import 'package:blood_bank_hospital/core/helpers/shared_preference.dart';
 import 'package:blood_bank_hospital/core/helpers/spacing.dart';
 import 'package:blood_bank_hospital/core/routing/routes.dart';
 import 'package:blood_bank_hospital/core/widgets/sidebar.dart';
 import 'package:blood_bank_hospital/features/dashboard/data/model/donation_request_model.dart';
 import 'package:blood_bank_hospital/features/dashboard/logic/active_requests_table_cubit.dart';
-import 'package:blood_bank_hospital/features/dashboard/logic/donation_request_cubit.dart';
-import 'package:blood_bank_hospital/features/dashboard/logic/donation_request_state.dart';
 import 'package:blood_bank_hospital/features/dashboard/logic/blood_type_cubit.dart';
 import 'package:blood_bank_hospital/features/dashboard/logic/blood_type_state.dart';
+import 'package:blood_bank_hospital/features/dashboard/logic/donation_request_cubit.dart';
+import 'package:blood_bank_hospital/features/dashboard/logic/donation_request_state.dart';
 import 'package:blood_bank_hospital/features/dashboard/logic/summary_card_cubit.dart';
 import 'package:blood_bank_hospital/features/dashboard/logic/summary_card_state.dart';
 import 'package:blood_bank_hospital/features/dashboard/ui/recent_requests_table.dart';
@@ -15,13 +22,9 @@ import 'package:blood_bank_hospital/features/dashboard/ui/summary_card.dart';
 import 'package:blood_bank_hospital/features/inventory_management/ui/inventory_management_screen.dart';
 import 'package:blood_bank_hospital/features/past_requests/ui/past_requests_screen.dart';
 import 'package:blood_bank_hospital/features/settings/ui/settings_screen.dart';
+import 'package:blood_bank_hospital/features/login/logic/login_cubit.dart';
+import 'package:blood_bank_hospital/features/login/logic/login_state.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get_it/get_it.dart';
-import 'package:hexcolor/hexcolor.dart';
-import 'package:sidebarx/sidebarx.dart';
 
 class DashBoardScreen extends StatefulWidget {
   static const String routeName = Routes.dashboardScreen;
@@ -33,9 +36,36 @@ class DashBoardScreen extends StatefulWidget {
 }
 
 class _DashBoardScreenState extends State<DashBoardScreen> {
-  final _controller = SidebarXController(selectedIndex: 0, extended: true);
-  final _key = GlobalKey<ScaffoldState>();
-  final _navigatorKey = GlobalKey<NavigatorState>();
+  late final SidebarXController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = SidebarXController(selectedIndex: 0, extended: true);
+    _restoreSidebarState();
+  }
+
+  Future<void> _restoreSidebarState() async {
+    final currentRoute = await SharedPrefHelper.getSecuredString('currentRoute');
+    final selectedIndex = _mapRouteToIndex(currentRoute);
+    if (mounted) {
+      _controller.selectIndex(selectedIndex);
+    }
+  }
+
+  int _mapRouteToIndex(String? route) {
+    switch (route) {
+      case Routes.inventoryManagementScreen:
+        return 1;
+      case Routes.pastRequestsScreen:
+        return 2;
+      case Routes.settingsScreen:
+        return 3;
+      case Routes.dashboardScreen:
+      default:
+        return 0;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,120 +79,153 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
         ),
         BlocProvider(create: (context) => GetIt.I<DonationRequestCubit>()),
         BlocProvider(create: (context) => GetIt.I<BloodTypeCubit>()),
+        BlocProvider(create: (context) => GetIt.I<LoginCubit>()),
       ],
-      child: SafeArea(
-        child: Scaffold(
-          key: _key,
-          body: LayoutBuilder(
-            builder: (context, constraints) {
-              final isWideScreen = constraints.maxWidth > 1200;
-              final maxHeight = constraints.maxHeight.isFinite
-                  ? constraints.maxHeight
-                  : 600.h;
-              final horizontalPadding = isWideScreen ? 40.w : 20.w;
-
-              return SingleChildScrollView(
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minHeight: maxHeight,
-                    maxHeight: maxHeight,
-                  ),
-                  child: IntrinsicHeight(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        AnimatedBuilder(
+      child: BlocListener<LoginCubit, LoginState>(
+        listener: (context, state) {
+          if (state is LoginStateLogoutSuccess) {
+            context.pushNamedAndRemoveUntil(
+              Routes.loginScreen,
+              predicate: (route) => false,
+            );
+          } else if (state is LoginStateError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  state.errorHandler.apiErrorModel.message ?? 'Logout failed',
+                ),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        },
+        child: SafeArea(
+          child: Scaffold(
+            body: AnimatedBuilder(
+              animation: _controller,
+              builder: (context, _) {
+                final contentWidth = MediaQuery.of(context).size.width * (_controller.extended ? 0.8 : 0.95);
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * (_controller.extended ? 0.2 : 0.05),
+                      child: SideBarXExample(
+                        controller: _controller,
+                        maxHeight: MediaQuery.of(context).size.height,
+                      ),
+                    ),
+                    SizedBox(
+                      width: contentWidth,
+                      child: Center(
+                        child: AnimatedBuilder(
                           animation: _controller,
-                          builder: (context, _) {
-                            final sidebarWidth = _controller.extended
-                                ? (isWideScreen ? 280.w : 220.w)
-                                : 60.w;
-                            return SizedBox(
-                              width: sidebarWidth,
-                              child: SideBarXExample(
-                                controller: _controller,
-                                maxHeight: maxHeight,
-                              ),
-                            );
-                          },
-                        ),
-                        Expanded(
-                          child: AnimatedBuilder(
-                            animation: _controller,
-                            builder: (context, child) {
-                              switch (_controller.selectedIndex) {
-                                case 0:
-                                  return Navigator(
-                                    key: _navigatorKey,
-                                    initialRoute: Routes.dashboardScreen,
-                                    onGenerateRoute: (settings) {
-                                      WidgetBuilder builder;
-                                      switch (settings.name) {
-                                        case Routes.dashboardScreen:
-                                          builder = (context) =>
-                                              _buildDashboardContent(
-                                                context,
-                                                horizontalPadding,
-                                              );
-                                          break;
-                                        case Routes.inventoryManagementScreen:
-                                          builder = (context) =>
-                                              const InventoryManagementScreen();
-                                          break;
-                                        case Routes.pastRequestsScreen:
-                                          builder = (context) =>
-                                              const PastRequestsScreen();
-                                          break;
-                                        case Routes.settingsScreen:
-                                          builder = (context) =>
-                                              const SettingsScreen();
-                                          break;
-                                        default:
-                                          builder = (context) => const Center(
-                                                child: Text('Screen Not Found'),
-                                              );
-                                      }
-                                      return MaterialPageRoute(
-                                        builder: builder,
-                                        settings: settings,
-                                      );
-                                    },
-                                  );
-                                case 1:
-                                  return const InventoryManagementScreen();
-                                case 2:
-                                  return const PastRequestsScreen();
-                                case 3:
-                                  return const SettingsScreen();
-                                case 4:
-                                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                                    if (mounted) {
-                                      context.pushNamedAndRemoveUntil(
-                                        Routes.loginScreen,
-                                        predicate: (route) => false,
-                                      );
-                                    }
-                                  });
-                                  return const Center(
-                                    child: CircularProgressIndicator(),
-                                  );
-                                default:
-                                  return const Center(
-                                    child: Text(
-                                      'Home',
-                                      style: TextStyle(fontSize: 40),
+                          builder: (context, child) {
+                            switch (_controller.selectedIndex) {
+                              case 0:
+                                return Navigator(
+                                  key: UniqueKey(),
+                                  onGenerateRoute: (settings) => MaterialPageRoute(
+                                    builder: (context) => _buildDashboardContent(
+                                      context,
+                                      contentWidth > 1200 ? 40.w : 20.w,
+                                    ),
+                                  ),
+                                );
+                              case 1:
+                                return Navigator(
+                                  key: UniqueKey(),
+                                  onGenerateRoute: (settings) => MaterialPageRoute(
+                                    builder: (context) => const InventoryManagementScreen(),
+                                  ),
+                                );
+                              case 2:
+                                return Navigator(
+                                  key: UniqueKey(),
+                                  onGenerateRoute: (settings) => MaterialPageRoute(
+                                    builder: (context) => const PastRequestsScreen(),
+                                  ),
+                                );
+                              case 3:
+                                return Navigator(
+                                  key: UniqueKey(),
+                                  onGenerateRoute: (settings) => MaterialPageRoute(
+                                    builder: (context) => const SettingsScreen(),
+                                  ),
+                                );
+                              case 4:
+                                WidgetsBinding.instance.addPostFrameCallback((_) {
+                                  if (mounted) {
+                                    context.read<LoginCubit>().logout();
+                                  }
+                                });
+                                return const Center(child: CircularProgressIndicator());
+                              case 5:
+                                WidgetsBinding.instance.addPostFrameCallback((_) {
+                                  showDialog(
+                                    context: context,
+                                    builder: (dialogContext) => AlertDialog(
+                                      title: const Text('Statistics'),
+                                      content: const Text('Statistics feature is coming soon!'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () => Navigator.of(dialogContext).pop(),
+                                          child: const Text('OK'),
+                                        ),
+                                      ],
                                     ),
                                   );
-                              }
-                            },
-                          ),
+                                });
+                                return Navigator(
+                                  key: UniqueKey(),
+                                  onGenerateRoute: (settings) => MaterialPageRoute(
+                                    builder: (context) => _buildDashboardContent(
+                                      context,
+                                      contentWidth > 1200 ? 40.w : 20.w,
+                                    ),
+                                  ),
+                                );
+                              case 6:
+                                WidgetsBinding.instance.addPostFrameCallback((_) {
+                                  showDialog(
+                                    context: context,
+                                    builder: (dialogContext) => AlertDialog(
+                                      title: const Text('Orders'),
+                                      content: const Text('Orders feature is coming soon!'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () => Navigator.of(dialogContext).pop(),
+                                          child: const Text('OK'),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                });
+                                return Navigator(
+                                  key: UniqueKey(),
+                                  onGenerateRoute: (settings) => MaterialPageRoute(
+                                    builder: (context) => _buildDashboardContent(
+                                      context,
+                                      contentWidth > 1200 ? 40.w : 20.w,
+                                    ),
+                                  ),
+                                );
+                              default:
+                                return const Center(
+                                  child: Text(
+                                    'Home',
+                                    style: TextStyle(fontSize: 40),
+                                  ),
+                                );
+                            }
+                          },
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-              );
-            },
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),
@@ -240,7 +303,9 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                     );
                   },
                   successWithRequests: (requests) {
-                    debugPrint('DashBoardScreen: DonationRequestCubit success with ${requests.length} requests');
+                    debugPrint(
+                      'DashBoardScreen: DonationRequestCubit success with ${requests.length} requests',
+                    );
                     context.read<SummaryCardCubit>().getRequestCounts();
                     context.read<ActiveRequestsCubit>().getActiveRequests();
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -251,7 +316,9 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                     );
                   },
                   error: (errorHandler) {
-                    debugPrint('DashBoardScreen: DonationRequestCubit error - ${errorHandler.apiErrorModel.message}');
+                    debugPrint(
+                      'DashBoardScreen: DonationRequestCubit error - ${errorHandler.apiErrorModel.message}',
+                    );
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
@@ -402,7 +469,9 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                             state.maybeWhen(
                               success: (bloodTypes) {
                                 bloodTypeId = bloodTypes
-                                    .firstWhere((type) => type.name == selectedBloodType)
+                                    .firstWhere(
+                                      (type) => type.name == selectedBloodType,
+                                    )
                                     .id;
                               },
                               orElse: () {
@@ -425,7 +494,9 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                 numOfLiter: int.parse(quantityController.text),
                                 hospitalId: 16,
                               );
-                              context.read<DonationRequestCubit>().createDonationRequest(request);
+                              context
+                                  .read<DonationRequestCubit>()
+                                  .createDonationRequest(request);
                               Navigator.of(dialogContext).pop();
                             } else {
                               ScaffoldMessenger.of(dialogContext).showSnackBar(

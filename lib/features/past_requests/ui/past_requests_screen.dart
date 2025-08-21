@@ -24,11 +24,7 @@ class _PastRequestsState extends State<PastRequestsScreen> {
     return BlocProvider(
       create: (context) => GetIt.I<PastRequestsCubit>()..getPastRequests(),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Past Requests'),
-          backgroundColor: Colors.white,
-          elevation: 0.5,
-        ),
+        
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 20.h),
           child: Column(
