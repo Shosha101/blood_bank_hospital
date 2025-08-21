@@ -29,7 +29,7 @@ class _SummaryCardApiService implements SummaryCardApiService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'DonationRequest/hospital/open-requests/14',
+            'DonationRequest/hospital/open-requests/16',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -56,7 +56,7 @@ class _SummaryCardApiService implements SummaryCardApiService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'DonationRequest/hospital/completed-requests/14',
+            'DonationRequest/hospital/completed-requests/16',
             queryParameters: queryParameters,
             data: _data,
           )

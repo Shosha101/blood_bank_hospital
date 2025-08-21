@@ -9,9 +9,9 @@ part 'summary_card_api_service.g.dart';
 abstract class SummaryCardApiService {
   factory SummaryCardApiService(Dio dio) = _SummaryCardApiService;
 
-  @GET('DonationRequest/hospital/open-requests/14')
+  @GET('DonationRequest/hospital/open-requests/16')
   Future<int> getOpenRequestsCount();
 
-  @GET('DonationRequest/hospital/completed-requests/14')
+  @GET('DonationRequest/hospital/completed-requests/16')
   Future<int> getCompletedRequestsCount();
 }

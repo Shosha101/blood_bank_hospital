@@ -14,7 +14,6 @@ import 'package:get_it/get_it.dart';
 
 class AppRouter {
   Route? generateRoute(RouteSettings settings) {
-    //this arguments to be passed in any screen like this ( arguments as ClassName )
     final arguments = settings.arguments;
     final getIt = GetIt.instance;
 
@@ -25,36 +24,29 @@ class AppRouter {
         );
       case Routes.loginScreen:
         return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (context) => getIt<LoginCubit>(),
+          builder: (_) => BlocProvider.value(
+            value: getIt<LoginCubit>(),
             child: const LoginScreen(),
           ),
         );
-      // case Routes.dashboardScreen:
-      //   return MaterialPageRoute(
-      //     builder: (_) => BlocProvider(
-      //       create: (context) => getIt<DashboardCubit>(),
-      //       child: const DashBoardScreen(),
-      //     ),
-      //   );
-      case Routes.pastRequesScreen:
+      case Routes.pastRequestsScreen: // Fixed typo
         return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (context) => getIt<PastRequestsCubit>(),
+          builder: (_) => BlocProvider.value(
+            value: getIt<PastRequestsCubit>(),
             child: const PastRequestsScreen(),
           ),
         );
       case Routes.settingsScreen:
         return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (context) => getIt<SettingsCubit>(),
+          builder: (_) => BlocProvider.value(
+            value: getIt<SettingsCubit>(),
             child: const SettingsScreen(),
           ),
         );
       case Routes.inventoryManagementScreen:
         return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (context) => getIt<InventoryCubit>(),
+          builder: (_) => BlocProvider.value(
+            value: getIt<InventoryCubit>(),
             child: const InventoryManagementScreen(),
           ),
         );

@@ -14,8 +14,4 @@ abstract class ApiService {
   //   @Body() LoginRequestBody loginRequestBody,
   // );
 
-  // @POST(ApiConstants.signup)
-  // Future<SignupResponse> signup(
-  //   @Body() SignupRequestBody signupRequestBody,
-  // );
 }

@@ -13,7 +13,7 @@ class HospitalApp extends StatelessWidget {
     return ScreenUtilInit(
       designSize: const Size(1280, 800),
       minTextAdapt: true,
-      splitScreenMode: true, // Improves web responsiveness
+      splitScreenMode: true,
       builder: (context, child) {
         return MaterialApp(
           title: 'Hospital App',
@@ -26,8 +26,12 @@ class HospitalApp extends StatelessWidget {
           onGenerateRoute: appRouter.generateRoute,
           builder: (context, widget) {
             return MediaQuery(
-              data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(1.0)),
-              child: widget!,
+              data: MediaQuery.of(context).copyWith(textScaler: const TextScaler.linear(1.0)),
+              child: SizedBox(
+                width: ScreenUtil().screenWidth,
+                height: ScreenUtil().screenHeight,
+                child: widget!, // Ensure full-screen constraints
+              ),
             );
           },
         );

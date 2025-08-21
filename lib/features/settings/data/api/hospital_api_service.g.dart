@@ -29,7 +29,7 @@ class _HospitalApiService implements HospitalApiService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'hospital/14',
+            'hospital/16',
             queryParameters: queryParameters,
             data: _data,
           )

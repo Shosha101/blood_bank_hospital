@@ -109,7 +109,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                           builder = (context) =>
                                               const InventoryManagementScreen();
                                           break;
-                                        case Routes.pastRequesScreen:
+                                        case Routes.pastRequestsScreen:
                                           builder = (context) =>
                                               const PastRequestsScreen();
                                           break;
@@ -423,7 +423,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                               final request = DonationRequestModel(
                                 bloodTypeId: bloodTypeId,
                                 numOfLiter: int.parse(quantityController.text),
-                                hospitalId: 14,
+                                hospitalId: 16,
                               );
                               context.read<DonationRequestCubit>().createDonationRequest(request);
                               Navigator.of(dialogContext).pop();

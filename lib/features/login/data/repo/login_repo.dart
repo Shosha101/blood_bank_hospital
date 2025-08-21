@@ -1,18 +1,31 @@
-
-
+import 'package:blood_bank_hospital/core/networking/api_error_handler.dart';
+import 'package:blood_bank_hospital/core/networking/api_result.dart';
+import 'package:blood_bank_hospital/features/login/data/model/login_request_body.dart';
+import 'package:blood_bank_hospital/features/login/data/model/login_response.dart';
+import 'package:blood_bank_hospital/features/login/data/model/logout_response.dart';
 import 'package:blood_bank_hospital/features/login/data/api/login_api_service.dart';
+import 'package:dio/dio.dart';
 
 class LoginRepo {
   final LoginApiService _loginApiService;
 
-  LoginRepo(this._loginApiService);
+  LoginRepo(this._loginApiService, Dio dio);
 
-  // Future<ApiResult<HospitalsResponseModel>> getSpecialization() async {
-  //   try {
-  //     final response = await _hospitalsApiService.getHospitals();
-  //     return ApiResult.success(response);
-  //   } catch (error) {
-  //     return ApiResult.failure(ErrorHandler.handle(error));
-  //   }
-  // }
+  Future<ApiResult<LoginResponse>> login(LoginRequestBody loginRequestBody) async {
+    try {
+      final response = await _loginApiService.login(loginRequestBody);
+      return ApiResult.success(response);
+    } on DioException catch (e) {
+      return ApiResult.failure(ErrorHandler.handle(e));
+    }
+  }
+
+  Future<ApiResult<LogoutResponse>> logout() async {
+    try {
+      final response = await _loginApiService.logout();
+      return ApiResult.success(response);
+    } on DioException catch (e) {
+      return ApiResult.failure(ErrorHandler.handle(e));
+    }
+  }
 }

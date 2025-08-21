@@ -8,6 +8,6 @@ part 'hospital_api_service.g.dart';
 abstract class HospitalApiService {
   factory HospitalApiService(Dio dio) = _HospitalApiService;
 
-  @GET('hospital/14')
+  @GET('hospital/16')
   Future<HospitalModel> getHospitalData();
 }
