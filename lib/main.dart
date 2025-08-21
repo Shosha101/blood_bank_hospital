@@ -1,3 +1,5 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'package:blood_bank_hospital/core/di/dependency_injection.dart';
 import 'package:blood_bank_hospital/hospital_app.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +12,15 @@ void main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   try {
+    // Initialize Firebase
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    // Set up dependency injection
     await setupGetIt();
+    // Ensure screen size for responsive design
     await ScreenUtil.ensureScreenSize();
+    // Remove splash screen after initialization
     WidgetsBinding.instance.addPostFrameCallback((_) {
       FlutterNativeSplash.remove();
     });
@@ -29,4 +38,3 @@ void main() async {
     appRouter: AppRouter(),
   ));
 }
-

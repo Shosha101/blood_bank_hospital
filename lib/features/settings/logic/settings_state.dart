@@ -8,10 +8,6 @@ class SettingsState with _$SettingsState {
   const factory SettingsState.initial() = _Initial;
 
   const factory SettingsState.hospitalsLoading() = SettingsStateLoading;
-  // const factory HospitalsState.hospitalsSuccess(List<HospitalsData?>? specializationDataList) = HospitalsSuccess;
   const factory SettingsState.hospitalsError(ErrorHandler errorHandler) = SettingsStateError;
 
-  // // Doctors
-  // const factory HospitalsState.doctorsSuccess(List<Doctors?>? doctorsList) = DoctorsSuccess;
-  // const factory HospitalsState.doctorsError(ErrorHandler errorHandler) = DoctorsError;
 }

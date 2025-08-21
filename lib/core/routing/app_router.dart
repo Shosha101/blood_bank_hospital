@@ -6,7 +6,7 @@ import 'package:blood_bank_hospital/features/login/logic/login_cubit.dart';
 import 'package:blood_bank_hospital/features/login/ui/login_screen.dart';
 import 'package:blood_bank_hospital/features/past_requests/logic/past_requests_cubit.dart';
 import 'package:blood_bank_hospital/features/past_requests/ui/past_requests_screen.dart';
-import 'package:blood_bank_hospital/features/settings/logic/settings_cubit.dart';
+import 'package:blood_bank_hospital/features/settings/logic/hospital_cubit.dart'; // Update import
 import 'package:blood_bank_hospital/features/settings/ui/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,7 +29,7 @@ class AppRouter {
             child: const LoginScreen(),
           ),
         );
-      case Routes.pastRequestsScreen: // Fixed typo
+      case Routes.pastRequestsScreen:
         return MaterialPageRoute(
           builder: (_) => BlocProvider.value(
             value: getIt<PastRequestsCubit>(),
@@ -39,7 +39,7 @@ class AppRouter {
       case Routes.settingsScreen:
         return MaterialPageRoute(
           builder: (_) => BlocProvider.value(
-            value: getIt<SettingsCubit>(),
+            value: getIt<HospitalCubit>()..getHospitalData(), // Use HospitalCubit
             child: const SettingsScreen(),
           ),
         );

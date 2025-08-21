@@ -32,51 +32,81 @@ final getIt = GetIt.instance;
 Future<void> setupGetIt() async {
   try {
     DioFactory.resetDio();
-    Dio dio = await DioFactory.getDio(useCorsProxy: false); // Test without proxy
+    Dio dio = await DioFactory.getDio(useCorsProxy: false);
     getIt.registerLazySingleton<Dio>(() => dio);
     getIt.registerLazySingleton<ApiService>(() => ApiService(dio));
 
     // Summary Card
-    getIt.registerLazySingleton<SummaryCardApiService>(() => SummaryCardApiService(dio));
-    getIt.registerLazySingleton<SummaryCardRepo>(() => SummaryCardRepo(getIt()));
+    getIt.registerLazySingleton<SummaryCardApiService>(
+      () => SummaryCardApiService(dio),
+    );
+    getIt.registerLazySingleton<SummaryCardRepo>(
+      () => SummaryCardRepo(getIt()),
+    );
     getIt.registerFactory<SummaryCardCubit>(() => SummaryCardCubit(getIt()));
 
     // Active Requests
-    getIt.registerLazySingleton<ActiveRequestsApiService>(() => ActiveRequestsApiService(dio));
-    getIt.registerLazySingleton<ActiveRequestsRepo>(() => ActiveRequestsRepo(getIt()));
-    getIt.registerFactory<ActiveRequestsCubit>(() => ActiveRequestsCubit(getIt()));
+    getIt.registerLazySingleton<ActiveRequestsApiService>(
+      () => ActiveRequestsApiService(dio),
+    );
+    getIt.registerLazySingleton<ActiveRequestsRepo>(
+      () => ActiveRequestsRepo(getIt()),
+    );
+    getIt.registerFactory<ActiveRequestsCubit>(
+      () => ActiveRequestsCubit(getIt()),
+    );
 
     // Inventory
-    getIt.registerLazySingleton<InventoryApiService>(() => InventoryApiService(dio));
+    getIt.registerLazySingleton<InventoryApiService>(
+      () => InventoryApiService(dio),
+    );
     getIt.registerLazySingleton<InventoryRepo>(() => InventoryRepo(getIt()));
     getIt.registerFactory<InventoryCubit>(() => InventoryCubit(getIt()));
 
     // Completed Requests
-    getIt.registerLazySingleton<PastRequestsApiService>(() => PastRequestsApiService(dio));
-    getIt.registerLazySingleton<PastRequestsRepo>(() => PastRequestsRepo(getIt()));
+    getIt.registerLazySingleton<PastRequestsApiService>(
+      () => PastRequestsApiService(dio),
+    );
+    getIt.registerLazySingleton<PastRequestsRepo>(
+      () => PastRequestsRepo(getIt()),
+    );
     getIt.registerFactory<PastRequestsCubit>(() => PastRequestsCubit(getIt()));
 
     // Donation Request
-    getIt.registerLazySingleton<DonationRequestApiService>(() => DonationRequestApiService(dio));
-    getIt.registerLazySingleton<DonationRequestRepo>(() => DonationRequestRepo(getIt()));
-    getIt.registerFactory<DonationRequestCubit>(() => DonationRequestCubit(getIt<DonationRequestRepo>(), getIt<ActiveRequestsRepo>()));
+    getIt.registerLazySingleton<DonationRequestApiService>(
+      () => DonationRequestApiService(dio),
+    );
+    getIt.registerLazySingleton<DonationRequestRepo>(
+      () => DonationRequestRepo(getIt()),
+    );
+    getIt.registerFactory<DonationRequestCubit>(
+      () => DonationRequestCubit(
+        getIt<DonationRequestRepo>(),
+        getIt<ActiveRequestsRepo>(),
+      ),
+    );
 
     // Blood Types
-    getIt.registerLazySingleton<BloodTypeApiService>(() => BloodTypeApiService(dio));
+    getIt.registerLazySingleton<BloodTypeApiService>(
+      () => BloodTypeApiService(dio),
+    );
     getIt.registerLazySingleton<BloodTypeRepo>(() => BloodTypeRepo(getIt()));
     getIt.registerFactory<BloodTypeCubit>(() => BloodTypeCubit(getIt()));
 
     // Hospital
-    getIt.registerLazySingleton<HospitalApiService>(() => HospitalApiService(dio));
+    getIt.registerLazySingleton<HospitalApiService>(
+      () => HospitalApiService(dio),
+    );
     getIt.registerLazySingleton<HospitalRepo>(() => HospitalRepo(getIt()));
     getIt.registerFactory<HospitalCubit>(() => HospitalCubit(getIt()));
 
     // Login
     getIt.registerLazySingleton<LoginApiService>(() => LoginApiService(dio));
-    getIt.registerLazySingleton<LoginRepo>(() => LoginRepo(getIt<LoginApiService>(), getIt<Dio>()));
+    getIt.registerLazySingleton<LoginRepo>(
+      () => LoginRepo(getIt<LoginApiService>(), getIt<Dio>()),
+    );
     getIt.registerFactory<LoginCubit>(() => LoginCubit(getIt<LoginRepo>()));
   } catch (e) {
     print('Error initializing setupGetIt: $e');
-    rethrow;
   }
 }
