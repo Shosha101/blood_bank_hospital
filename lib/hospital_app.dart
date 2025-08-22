@@ -2,7 +2,6 @@ import 'package:blood_bank_hospital/core/helpers/shared_preference.dart';
 import 'package:blood_bank_hospital/core/routing/app_router.dart';
 import 'package:blood_bank_hospital/core/routing/routes.dart';
 import 'package:blood_bank_hospital/core/theming/colors.dart';
-import 'package:blood_bank_hospital/features/dashboard/ui/dashboard_screen.dart';
 import 'package:blood_bank_hospital/features/login/logic/login_cubit.dart';
 import 'package:blood_bank_hospital/features/login/logic/login_state.dart';
 import 'package:blood_bank_hospital/features/login/ui/login_screen.dart';
@@ -26,9 +25,9 @@ class HospitalApp extends StatelessWidget {
           // Determine device type based on screen width
           final width = constraints.maxWidth;
           Size designSize;
-          if (width < 600) {
+          if (width < 390) {
             designSize = const Size(390, 844); // Mobile
-          } else if (width < 900) {
+          } else if (width < 600) {
             designSize = const Size(768, 1024); // Tablet
           } else {
             designSize = const Size(1280, 800); // Web

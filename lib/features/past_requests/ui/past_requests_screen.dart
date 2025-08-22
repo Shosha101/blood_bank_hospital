@@ -161,9 +161,9 @@ class _PastRequestsState extends State<PastRequestsScreen> {
 
     return DataRow(
       cells: [
-        DataCell(Text('#REQ${request.id}', style: TextStyle(fontSize: 10.spMax))),
-        DataCell(Text(request.bloodTypeName, style: TextStyle(fontSize: 10.spMax))),
-        DataCell(Text('${request.numOfLiter} Units', style: TextStyle(fontSize: 10.spMax))),
+        DataCell(Text('#REQ${request.id}', style: TextStyle(fontSize: 10.spMax, overflow: TextOverflow.ellipsis))),
+        DataCell(Text(request.bloodTypeName, style: TextStyle(fontSize: 10.spMax, overflow: TextOverflow.ellipsis))),
+        DataCell(Text('${request.numOfLiter} Units', style: TextStyle(fontSize: 10.spMax, overflow: TextOverflow.ellipsis))),
         DataCell(
           Container(
             width: 73.w,
@@ -176,6 +176,7 @@ class _PastRequestsState extends State<PastRequestsScreen> {
               child: Text(
                 request.status,
                 style: TextStyle(
+                  overflow: TextOverflow.ellipsis,
                   color: fColor,
                   fontSize: 12.spMax,
                   fontWeight: FontWeight.w500,

@@ -78,7 +78,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       verticalSpace(25.h),
                       Text(
                         'Phone Number',
-                        style: TextStyle(fontSize: 12.sp, color: Colors.black),
+                        style: TextStyle(
+                          fontSize: 12.spMax,
+                          color: Colors.black,
+                        ),
                       ),
                       verticalSpace(8.h),
                       SizedBox(
@@ -107,7 +110,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       verticalSpace(24.h),
                       Text(
                         'Password',
-                        style: TextStyle(fontSize: 12.sp, color: Colors.black),
+                        style: TextStyle(
+                          fontSize: 12.spMax,
+                          color: Colors.black,
+                        ),
                       ),
                       verticalSpace(8.h),
                       SizedBox(
