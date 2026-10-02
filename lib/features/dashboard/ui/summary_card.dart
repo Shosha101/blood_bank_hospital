@@ -1,58 +1,72 @@
+import 'package:blood_bank_hospital/core/theming/app_theme.dart';
+import 'package:blood_bank_hospital/core/widgets/app_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hexcolor/hexcolor.dart';
 
+/// One figure of the dashboard: a title, a big count and a hint under it.
 class SummaryCard extends StatelessWidget {
   final String title;
+  final String hint;
   final int count;
+  final IconData icon;
+  final Color color;
+  final Color background;
 
-  const SummaryCard({super.key, required this.title, required this.count});
+  const SummaryCard({
+    super.key,
+    required this.title,
+    required this.hint,
+    required this.count,
+    required this.icon,
+    required this.color,
+    required this.background,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final isWideScreen = constraints.maxWidth > 1200;
-        return SizedBox(
-          width: isWideScreen ? 230.w : 207.w,
-          height: 130.h,
-          child: Card(
-            color: HexColor('#F0F2F5'),
-            elevation: 3,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(isWideScreen ? 16.r : 12.r),
-            ),
-            child: ClipRect(
-              child: Padding(
-                padding: EdgeInsets.all(isWideScreen ? 16.w : 12.w),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      count.toString(),
-                      style: TextStyle(
-                        fontSize: isWideScreen ? 20.spMax : 18.spMax,
-                        fontWeight: FontWeight.bold,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    SizedBox(height: 4.h),
-                    Text(
-                      title,
-                      style: TextStyle(
-                        fontSize: isWideScreen ? 16.spMax : 14.spMax,
-                        fontWeight: FontWeight.w500,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
+    return AppCard(
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.muted,
+                  ),
                 ),
-              ),
+                const SizedBox(height: 6),
+                Text(
+                  '$count',
+                  style: const TextStyle(
+                    fontSize: 32,
+                    height: 1.1,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.text,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  hint,
+                  style: const TextStyle(fontSize: 12, color: AppColors.hint),
+                ),
+              ],
             ),
           ),
-        );
-      },
+          Container(
+            width: 52,
+            height: 52,
+            decoration: BoxDecoration(
+              color: background,
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Icon(icon, color: color, size: 26),
+          ),
+        ],
+      ),
     );
   }
 }

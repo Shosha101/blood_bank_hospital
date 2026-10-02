@@ -1,361 +1,359 @@
-// lib/features/inventory_management/ui/inventory_management_screen.dart
+import 'package:blood_bank_hospital/core/theming/app_theme.dart';
+import 'package:blood_bank_hospital/core/widgets/app_widgets.dart';
 import 'package:blood_bank_hospital/features/inventory_management/data/model/inventory_management_model.dart';
-
 import 'package:blood_bank_hospital/features/inventory_management/logic/inventory_management_cubit.dart';
 import 'package:blood_bank_hospital/features/inventory_management/logic/inventory_management_state.dart';
+import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hexcolor/hexcolor.dart';
-import 'package:intl/intl.dart';
 
-class InventoryManagementScreen extends StatefulWidget {
+class InventoryManagementScreen extends StatelessWidget {
   const InventoryManagementScreen({super.key});
 
-  @override
-  State<StatefulWidget> createState() => _InventoryManagementState();
-}
-
-class _InventoryManagementState extends State<InventoryManagementScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => GetIt.I<InventoryCubit>()..getInventory(),
-      child: Scaffold(
-        body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 20.h),
+      child: const _InventoryView(),
+    );
+  }
+}
+
+class _InventoryView extends StatefulWidget {
+  const _InventoryView();
+
+  @override
+  State<_InventoryView> createState() => _InventoryViewState();
+}
+
+class _InventoryViewState extends State<_InventoryView> {
+  // Kept so the table stays on screen while an update is being saved.
+  List<InventoryModel>? _lastInventory;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<InventoryCubit, InventoryState>(
+      listener: (context, state) {
+        state.maybeWhen(
+          success: (inventory) => _lastInventory = inventory,
+          error: (errorHandler) {
+            if (_lastInventory == null) return;
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  errorHandler.apiErrorModel.message ??
+                      context.tr('update_failed'),
+                ),
+                backgroundColor: AppColors.primaryDark,
+              ),
+            );
+          },
+          orElse: () {},
+        );
+      },
+      builder: (context, state) {
+        final inventory = state.maybeWhen(
+          success: (inventory) => inventory,
+          orElse: () => _lastInventory,
+        );
+        final loading = state.maybeWhen(
+          loading: () => true,
+          initial: () => true,
+          orElse: () => false,
+        );
+
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(28),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                'Inventory',
-                style: TextStyle(
-                  fontSize: 22.spMax,
-                  fontWeight: FontWeight.bold,
-                ),
+                context.tr('inventory_subtitle'),
+                style: const TextStyle(fontSize: 14, color: AppColors.muted),
               ),
-              SizedBox(height: 20.h),
-              Expanded(
-                child: BlocBuilder<InventoryCubit, InventoryState>(
-                  builder: (context, state) {
-                    return state.maybeWhen(
-                      loading: () =>
-                          const Center(child: CircularProgressIndicator()),
-                      success: (inventory) => LayoutBuilder(
-                        builder: (context, constraints) {
-                          return SingleChildScrollView(
-                            scrollDirection: Axis.vertical,
-                            child: Container(
-                              width: constraints.maxWidth,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(16.r),
-                                border: Border.all(color: HexColor('#637887')),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: DataTable(
-                                  headingRowHeight: 44.h,
-                                  dataRowMaxHeight: 72.h,
-                                  columnSpacing: 24.w,
-                                  headingTextStyle: TextStyle(
-                                    color: Color(0xff42526d),
-                                    fontSize: 12.spMax,
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                  headingRowColor:
-                                      const WidgetStatePropertyAll(
-                                        Color(0xfffbfafb),
-                                      ),
-                                  columns: [
-                                    DataColumn(
-                                      label: Text(
-                                        'Blood Type',
-                                        style: TextStyle(
-                                          fontSize: 12.spMax,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      label: Text(
-                                        'Quantity',
-                                        style: TextStyle(
-                                          fontSize: 12.spMax,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      label: Text(
-                                        'Status',
-                                        style: TextStyle(
-                                          fontSize: 12.spMax,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      label: Text(
-                                        'Date',
-                                        style: TextStyle(
-                                          fontSize: 12.spMax,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    ),
-                                    DataColumn(
-                                      label: Text(
-                                        'Action',
-                                        style: TextStyle(
-                                          fontSize: 12.spMax,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                  rows: List.generate(
-                                    inventory.length,
-                                    (index) =>
-                                        _dataRow(context, inventory[index]),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                      error: (errorHandler) => Center(
-                        child: Text(
-                          errorHandler.apiErrorModel.message ??
-                              'Error fetching inventory',
-                          style: TextStyle(
-                            fontSize: 16.spMax,
-                            color: Colors.red,
-                          ),
-                        ),
-                      ),
-                      orElse: () => const SizedBox.shrink(),
-                    );
-                  },
+              const SizedBox(height: 14),
+              if (loading && inventory != null)
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                  child: LinearProgressIndicator(minHeight: 3),
+                ),
+              AppCard(
+                padding: EdgeInsets.zero,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: _body(context, state, inventory),
                 ),
               ),
             ],
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
-  DataRow _dataRow(BuildContext context, InventoryModel inventory) {
-    Color? bColor;
-    Color? fColor;
-    switch (inventory.status) {
-      case 'Available':
-        bColor = HexColor('#ECFDF3');
-        fColor = HexColor('#009881');
-        break;
-      case 'Low Stock':
-        bColor = HexColor('#FFFADF');
-        fColor = HexColor('#ECA600');
-        break;
-      case 'Out of Stock':
-      case 'NotAvailable':
-        bColor = HexColor('#FFEFEF');
-        fColor = HexColor('#FF4D4D');
-        break;
+  Widget _body(
+    BuildContext context,
+    InventoryState state,
+    List<InventoryModel>? inventory,
+  ) {
+    if (inventory == null) {
+      return state.maybeWhen(
+        error: (errorHandler) => Center(
+          child: StateMessage(
+            icon: Icons.error_outline,
+            title: context.tr('inventory_error'),
+            body: errorHandler.apiErrorModel.message,
+            actionLabel: context.tr('retry'),
+            onAction: () => context.read<InventoryCubit>().getInventory(),
+          ),
+        ),
+        orElse: () => const SizedBox(
+          height: 220,
+          child: Center(child: CircularProgressIndicator()),
+        ),
+      );
     }
 
-    return DataRow(
-      cells: [
-        DataCell(
-          Text(inventory.bloodTypeName, style: TextStyle(fontSize: 12.spMax)),
+    if (inventory.isEmpty) {
+      return Center(
+        child: StateMessage(
+          icon: Icons.inventory_2_outlined,
+          title: context.tr('availability_empty'),
         ),
-        DataCell(
-          Text(
-            '${inventory.currentQuantity} Units',
-            style: TextStyle(fontSize: 12.spMax),
-          ),
-        ),
-        DataCell(
-          Container(
-            width: 73.w,
-            height: 26.h,
-            decoration: BoxDecoration(
-              color: bColor,
-              borderRadius: BorderRadius.circular(14),
+      );
+    }
+
+    return AppTable(
+      columns: [
+        context.tr('col_blood_type'),
+        context.tr('col_quantity'),
+        context.tr('col_status'),
+        context.tr('col_expiration'),
+        context.tr('col_action'),
+      ],
+      flex: const [2, 2, 2, 4, 2],
+      rows: [
+        for (final item in inventory)
+          [
+            BloodBadge(bloodType: item.bloodTypeName, size: 36),
+            CellText(
+              context.tr('units', args: ['${item.currentQuantity}']),
+              strong: true,
             ),
-            child: Center(
-              child: Text(
-                inventory.status == 'NotAvailable'
-                    ? 'Out of Stock'
-                    : inventory.status,
-                style: TextStyle(
-                  color: fColor,
-                  fontSize: 12.spMax,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w500,
-                ),
+            StatusChip(status: item.status),
+            _ExpirationCell(raw: item.expirationDate),
+            TextButton.icon(
+              onPressed: () => _showUpdateDialog(context, item),
+              icon: const Icon(Icons.edit_outlined, size: 16),
+              label: Text(context.tr('update')),
+              style: TextButton.styleFrom(
+                foregroundColor: AppColors.primary,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
               ),
             ),
-          ),
-        ),
-        DataCell(
-          Text(inventory.expirationDate, style: TextStyle(fontSize: 12.spMax)),
-        ),
-        DataCell(
-          TextButton(
-            onPressed: () {
-              _showUpdatePopup(context, inventory);
-            },
-            child: Text(
-              'Update',
-              style: TextStyle(
-                fontSize: 12.spMax,
-                color: HexColor('#1A8AE5'),
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ),
+          ],
       ],
     );
   }
 
-  void _showUpdatePopup(BuildContext context, InventoryModel inventory) {
-    TextEditingController quantityController = TextEditingController(
+  void _showUpdateDialog(BuildContext context, InventoryModel inventory) {
+    final cubit = context.read<InventoryCubit>();
+    final quantityController = TextEditingController(
       text: inventory.currentQuantity.toString(),
     );
     DateTime? selectedDateTime = DateTime.tryParse(inventory.expirationDate);
 
     showDialog(
       context: context,
-      builder: (dialogContext) {
-        return StatefulBuilder(
-          builder: (dialogContext, setDialogState) {
-            return AlertDialog(
-              title: const Text('Update Inventory'),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextField(
-                    controller: quantityController,
-                    decoration: InputDecoration(
-                      labelText: 'Quantity',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.r),
-                      ),
-                    ),
-                    keyboardType: TextInputType.number,
-                  ),
-                  SizedBox(height: 10.h),
-                  Container(
-                    width: double.infinity,
-                    height: 40.h,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: HexColor('#637887')),
-                      borderRadius: BorderRadius.circular(8.r),
-                    ),
-                    child: TextButton(
-                      onPressed: () async {
-                        // Show date picker
-                        final selectedDate = await showDatePicker(
-                          context: dialogContext,
-                          initialDate: selectedDateTime ?? DateTime.now(),
-                          firstDate: DateTime(2020),
-                          lastDate: DateTime(2030),
-                        );
-                        if (selectedDate != null) {
-                          // Show time picker
-                          final selectedTime = await showTimePicker(
-                            context: dialogContext,
-                            initialTime: TimeOfDay.fromDateTime(
-                              selectedDateTime ?? DateTime.now(),
-                            ),
-                          );
-                          if (selectedTime != null) {
-                            setDialogState(() {
-                              selectedDateTime = DateTime(
-                                selectedDate.year,
-                                selectedDate.month,
-                                selectedDate.day,
-                                selectedTime.hour,
-                                selectedTime.minute,
-                              );
-                            });
-                          }
-                        }
-                      },
-                      child: Text(
-                        selectedDateTime != null
-                            ? DateFormat(
-                                'yyyy-MM-dd HH:mm:ss',
-                              ).format(selectedDateTime!)
-                            : 'Select Date',
-                        style: TextStyle(fontSize: 12.spMax),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(dialogContext).pop(),
-                  child: const Text(
-                    'Cancel',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    final updatedInventory = InventoryModel(
-                      id: inventory.id,
-                      bloodTypeName: inventory.bloodTypeName,
-                      currentQuantity:
-                          int.tryParse(quantityController.text) ??
-                          inventory.currentQuantity,
-                      expirationDate: selectedDateTime != null
-                          ? DateFormat(
-                              'yyyy-MM-dd\'T\'HH:mm:ss.SSSSSS',
-                            ).format(selectedDateTime!)
-                          : inventory.expirationDate,
-                      status: inventory.status,
-                    );
-                    context.read<InventoryCubit>().updateInventory(
-                      updatedInventory,
-                    );
-                    Navigator.of(dialogContext).pop();
-                  },
-                  child: Text(
-                    'Update',
-                    style: TextStyle(
-                      color: HexColor('#1A8AE5'),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
+      builder: (dialogContext) => StatefulBuilder(
+        builder: (dialogContext, setDialogState) {
+          Future<void> pickDateTime() async {
+            final selectedDate = await showDatePicker(
+              context: dialogContext,
+              initialDate: selectedDateTime ?? DateTime.now(),
+              firstDate: DateTime(2020),
+              lastDate: DateTime(2030),
             );
-          },
-        );
-      },
-    ).then((_) {
-      // Check for errors after dialog closes
-      if (context.read<InventoryCubit>().state is InventoryStateError) {
-        final error =
-            (context.read<InventoryCubit>().state as InventoryStateError)
-                .errorHandler;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              error.apiErrorModel.message ?? 'Failed to update inventory',
+            if (selectedDate == null || !dialogContext.mounted) return;
+            final selectedTime = await showTimePicker(
+              context: dialogContext,
+              initialTime: TimeOfDay.fromDateTime(
+                selectedDateTime ?? DateTime.now(),
+              ),
+            );
+            if (selectedTime == null) return;
+            setDialogState(() {
+              selectedDateTime = DateTime(
+                selectedDate.year,
+                selectedDate.month,
+                selectedDate.day,
+                selectedTime.hour,
+                selectedTime.minute,
+              );
+            });
+          }
+
+          return Dialog(
+            backgroundColor: AppColors.surface,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
             ),
-            backgroundColor: Colors.red,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 420),
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
+                      children: [
+                        BloodBadge(bloodType: inventory.bloodTypeName),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            dialogContext.tr('update_inventory'),
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.text,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    _FieldLabel(dialogContext.tr('quantity')),
+                    TextField(
+                      controller: quantityController,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    ),
+                    const SizedBox(height: 16),
+                    _FieldLabel(dialogContext.tr('col_expiration')),
+                    OutlinedButton.icon(
+                      onPressed: pickDateTime,
+                      icon: const Icon(Icons.event_outlined, size: 18),
+                      label: Text(
+                        selectedDateTime != null
+                            ? formatApiDateTime(
+                                selectedDateTime!.toIso8601String(),
+                              )
+                            : dialogContext.tr('select_date'),
+                        textDirection: TextDirection.ltr,
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: AppColors.text,
+                        side: const BorderSide(color: AppColors.border),
+                        alignment: AlignmentDirectional.centerStart,
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: () => Navigator.of(dialogContext).pop(),
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: AppColors.text,
+                              side: const BorderSide(color: AppColors.border),
+                            ),
+                            child: Text(dialogContext.tr('cancel')),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          flex: 2,
+                          child: FilledButton(
+                            onPressed: () {
+                              cubit.updateInventory(
+                                InventoryModel(
+                                  id: inventory.id,
+                                  bloodTypeName: inventory.bloodTypeName,
+                                  currentQuantity:
+                                      int.tryParse(quantityController.text) ??
+                                      inventory.currentQuantity,
+                                  // The API expects Latin digits whatever the app language is.
+                                  expirationDate: selectedDateTime != null
+                                      ? DateFormat(
+                                          "yyyy-MM-dd'T'HH:mm:ss.SSSSSS",
+                                          'en',
+                                        ).format(selectedDateTime!)
+                                      : inventory.expirationDate,
+                                  status: inventory.status,
+                                ),
+                              );
+                              Navigator.of(dialogContext).pop();
+                            },
+                            child: Text(dialogContext.tr('update')),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _FieldLabel extends StatelessWidget {
+  final String text;
+  const _FieldLabel(this.text);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Text(
+        text,
+        style: const TextStyle(
+          fontSize: 13,
+          fontWeight: FontWeight.w600,
+          color: AppColors.text,
+        ),
+      ),
+    );
+  }
+}
+
+/// Expiry date of a stock row, flagged when it falls within the next 7 days.
+class _ExpirationCell extends StatelessWidget {
+  final String raw;
+  const _ExpirationCell({required this.raw});
+
+  @override
+  Widget build(BuildContext context) {
+    final date = DateTime.tryParse(raw);
+    final now = DateTime.now();
+    final soon =
+        date != null &&
+        date.isAfter(now) &&
+        date.difference(now) <= const Duration(days: 7);
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Flexible(child: CellText(formatApiDateTime(raw), ltr: true)),
+        if (soon) ...[
+          const SizedBox(width: 8),
+          Tooltip(
+            message: context.tr('expires_soon'),
+            child: const Icon(
+              Icons.schedule,
+              size: 16,
+              color: AppColors.warning,
+            ),
           ),
-        );
-      }
-    });
+        ],
+      ],
+    );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:blood_bank_hospital/core/di/dependency_injection.dart';
@@ -12,6 +13,7 @@ void main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   try {
+    await EasyLocalization.ensureInitialized();
     // Initialize Firebase
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
@@ -26,15 +28,23 @@ void main() async {
     });
   } catch (e) {
     print('Critical error during initialization: $e');
-    runApp(const MaterialApp(
-      home: Scaffold(
-        body: Center(child: Text('Initialization failed. Please try again.')),
+    runApp(
+      const MaterialApp(
+        home: Scaffold(
+          body: Center(child: Text('Initialization failed. Please try again.')),
+        ),
       ),
-    ));
+    );
     return;
   }
 
-  runApp(HospitalApp(
-    appRouter: AppRouter(),
-  ));
+  runApp(
+    EasyLocalization(
+      supportedLocales: const [Locale('ar'), Locale('en')],
+      path: 'assets/translations',
+      fallbackLocale: const Locale('en'),
+      startLocale: const Locale('ar'),
+      child: HospitalApp(appRouter: AppRouter()),
+    ),
+  );
 }

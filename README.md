@@ -6,11 +6,24 @@ The **hospital-side dashboard** of a two-app blood bank platform built with **Fl
 
 ## Features
 
-- 📊 **Dashboard** — summary cards, blood-type availability overview, active requests table
-- 🧪 **Inventory management** — track stock per blood type
-- 📢 **Donation requests** — create and manage requests to donors
-- 🕘 **Past requests** history
-- ⚙️ **Settings**, 🔐 login with secure storage, sidebar navigation for desktop/web layouts
+- 📊 **Dashboard** — open and completed request counts, stock of every blood type, open requests table
+- 🧪 **Inventory management** — quantity, expiry date and status per blood type, with an update dialog
+- 📢 **Donation requests** — create a request by blood type and number of units
+- 🕘 **Past requests** history, filterable by status
+- ⚙️ **Settings** with the hospital details, 🔐 login with secure storage, sidebar navigation for desktop/web layouts
+- 🌍 **Arabic (RTL) and English** (`easy_localization`), switchable from every screen
+
+## Screenshots
+
+**Arabic**
+
+![Arabic screens](docs/screenshots/arabic.jpg)
+
+**English**
+
+![English screens](docs/screenshots/english.jpg)
+
+Rendered from the real screens with sample data by `tool/screens_golden_test.dart`.
 
 ## Architecture
 
